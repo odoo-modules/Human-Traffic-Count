@@ -62,8 +62,8 @@ class Htc(http.Controller):
             valid_ip = list(filter(lambda x: x == ip_address, extract_ip_list))
             if len(valid_ip) > 0:
                 date_string = data[0].get('transaction_date').split('T')[0]
-                # day = datetime.datetime.strptime(date_string, '%Y-%m-%d')
-                dt = datetime.datetime.strptime(date_string, '%Y-%m')
+                day = datetime.datetime.strptime(date_string, '%Y-%m-%d')
+                # dt = datetime.datetime.strptime(date_string, '%Y-%m')
                 week = day.isocalendar()[1]
                 dayNumber = day.weekday()
                 for obj in data:
