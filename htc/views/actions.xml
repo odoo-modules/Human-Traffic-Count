@@ -41,7 +41,7 @@
             <field name="name">Import Site Group</field>
             <field name="res_model">import.site_group</field>
             <field name="view_mode">tree,form</field>
-            <field name="view_id" ref="htc_sensor_site_import_form"/> 
+            <!-- <field name="view_id" ref="htc_sensor_site_import_form"/>  -->
             <field name="target">new</field>
         </record>
 

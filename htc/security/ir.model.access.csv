@@ -1,5 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_htc_sitegroup,htc.sitegroup,model_htc_sitegroup,,1,1,1,1
+access_htc_site_group,htc.site.group,model_htc_site_group,,1,1,1,1
 access_htc_sensor,htc.sensor,model_htc_sensor,,1,1,1,1
 access_htc_site,htc.site,model_htc_site,,1,1,1,1
 access_htc_group,htc.group,model_htc_group,,1,1,1,1

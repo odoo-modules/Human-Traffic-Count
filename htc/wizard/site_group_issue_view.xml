@@ -8,6 +8,7 @@
           <sheet>
             <group>
               <group>
+                <field name="site_group_id" invisible="1"/>
                 <field name="site_id"/>
               </group>
               <group>
@@ -15,8 +16,9 @@
             </group>
             <field name="sensor_ids">
               <tree>
-                <field name="sensor_mac_address"/>
-                <field name="site_id"/>
+                <field name="mac_address"/>
+                <field name="site_code"/>
+                <field name="status"/>
               </tree>
             </field>
           </sheet>
