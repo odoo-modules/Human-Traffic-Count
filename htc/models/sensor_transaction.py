@@ -5,7 +5,7 @@ from odoo import api, fields, models
 
 class SensorTransaction(models.Model):
     _name = 'htc.sensor_transaction'
-    
+
     site_id = fields.Many2one("htc.site", string="Site", required=True)
     sensor_id = fields.Many2one("htc.sensor", string="Sensor", required=True)
     transaction_date = fields.Datetime("Transaction Date", required=True)
@@ -16,3 +16,5 @@ class SensorTransaction(models.Model):
     week = fields.Integer("Week", required=True)
     day = fields.Integer("Day", required=True)
     method = fields.Char("Method")
+    start_time = fields.Char("Start Time")
+    end_time = fields.Char("End Time")
