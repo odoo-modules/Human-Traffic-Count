@@ -1,0 +1,53 @@
+<odoo>
+  <data>
+    <record model="ir.ui.view" id="user_form_inherit">
+      <field name="name">Users</field>
+      <field name="model">res.users</field>
+      <field name="inherit_id" ref="base.user_groups_view"/>
+      <field name="arch" type="xml">
+        <field name="in_group_4" position="after">
+           <field name="enable_notify_count" groups="base.group_no_one"/>
+        </field>
+      </field>
+    </record>
+    <record model="ir.ui.view" id="view_sensor_transaction_tree">
+      <field name="name">Sensor Transaction</field>
+      <field name="model">htc.sensor_transaction</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="site_id"/>
+          <field name="sensor_id"/>
+          <field name="transaction_date"/>
+          <field name="in_count"/>
+          <field name="out_count"/>
+          <field name="week"/>
+          <field name="day"/>
+          <field name="status"/>
+        </tree>
+      </field>
+    </record>
+     <record model="ir.ui.view" id="view_sensor_transaction_filter">
+      <field name="name">Sensor Transtion Filter</field>
+      <field name="model">htc.sensor_transaction</field>
+      <field name="arch" type="xml">
+        <search>
+          <field name="site_id"/>
+          <field name="sensor_id"/>
+          <field name="transaction_date"/>
+        </search>
+      </field>
+    </record>
+     <record id="action_sensor_transaction" model="ir.actions.act_window">
+       <field name="name">Sensor Transtion</field>
+       <field name="res_model">htc.sensor_transaction</field>
+       <field name="view_type">form</field>
+       <field name="view_mode">tree,form</field>
+       <field name="view_id" ref="view_sensor_transaction_tree"/> 
+    </record>
+    <menuitem  id="transion_menu_root" 
+      name="Sensor Transaction" 
+      parent="htc_root_menu"
+      action="action_sensor_transaction"
+      sequence="100"/>
+  </data>
+</odoo>

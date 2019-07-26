@@ -4,29 +4,29 @@ from odoo import api, fields, models
 
 
 class SiteGroup(models.Model):
-    _name = 'htc.sitegroup'
+    _name = 'htc.site.group'
     _inherit = 'mail.thread'
 
-    name = fields.Char("Site Group Name", required=True)
-    code = fields.Char("Site Group Code", required=True)
-    sensor_ids = fields.One2many("htc.sensor", "sitegroup_id", string="Sensors")
-    site_ids = fields.One2many("htc.site", "site_group_id", string="Sites")
+    site_group_name = fields.Char("Site Group Name", required=True)
+    site_group_code = fields.Char("Site Group Code", required=True)
+    license_code = fields.Char("Site Group License Code", required=True)
+    sensor_ids = fields.One2many("htc.sensor","site_group_id","Sensors")
     _sql_constraints = [
-        ('code_unique', 'unique(code)', "Can't be duplicate value for Site Group Code!")
+        ('site_group_code_unique', 'unique(site_group_code)', "Can't be duplicate value for Site Group Code!")
     ]
 
-    @api.onchange('code')
+    @api.onchange('site_group_code')
     def do_stuff(self):
-        if self.code:
-            self.code = str(self.code).upper()
+        if self.site_group_code:
+            self.site_group_code = str(self.site_group_code).upper()
         else:
-            self.code = ""
+            self.site_group_code = ""
 
     @api.multi
     def name_get(self):
         result = []
         for record in self:
-            code = record.code
+            code = record.site_group_code
             result.append((record.id, code))
         return result
 

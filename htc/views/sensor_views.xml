@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="htc_sensor_form">
+            <field name="name">Sensor Form View</field>
+            <field name="model">htc.sensor</field>
+            <field name="arch" type="xml">
+                <form string="Sensor">
+                    <sheet>
+                        <group>
+                            <field name="site_group_id"  placeholder="Site Group"/>
+                            <field name="mac_address"  placeholder="Mac Address"/>
+                            <field name="xml_format"  widget="selection" placeholder="Xml Format"/>
+                            <field name="device_name"  placeholder="Device Name"/>
+                            <field name="division_id"  placeholder="Division Id"/>
+                            <field name="sensor_id"  placeholder="Sensor Id"/>
+                            <field name="sensor_name"  placeholder="Sensor Name"/>
+                            <field name="hardware_release_version"  placeholder="Hardware Release Version"/>
+                            <field name="serial_number"  placeholder="Serial Number"/>
+                            <field name="software_release"  placeholder="Software Version"/>
+                            <field name="host_name"  placeholder="Host Name"/>
+                            <field name="ip_address"  placeholder="IP Address"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"
+                               groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread" placeholder="Share a message..."/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="view_sensor_tree" model="ir.ui.view">
+            <field name="name">htc.sensor.tree</field>
+            <field name="model">htc.sensor</field>
+            <field name="priority">4</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="site_group_id"  />
+                    <field name="mac_address" />
+                    <field name="device_name"/>
+                    <field name="xml_format"/>
+                    <field name="site_code"/>
+                </tree>
+            </field>
+        </record>
+    </data>
+
+</odoo>

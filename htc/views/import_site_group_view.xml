@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="htc_sensor_site_import_form">
+            <field name="name">Import Site Group</field>
+            <field name="model">import.site_group</field>
+            <field name="arch" type="xml">
+                <form string="Import Sensors">
+                    <sheet>
+                        <group>
+                            <field name="import_file" filename="import_fname" />
+                            <field name="import_fname" invisible="1" class="oe_inline oe_right" />
+                            <!-- <field name="site_group_id"/> -->
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"
+                               groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread" placeholder="Share a message..."/>
+                    </div>
+                    <footer>
+                        <button name="import_data" string="Import" type="object"
+                            class="oe_highlight" />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="htc_sensor_site_import_tree">
+            <field name="name">Import Site Group</field>
+            <field name="model">import.site_group</field>
+            <field name="arch" type="xml">
+               <tree>
+                    <field name="import_file"/>
+                    <field name="import_fname" />
+                    <!-- <field name="site_group_id"/> -->
+                </tree>
+            </field>
+        </record>
+    </data>
+</odoo>

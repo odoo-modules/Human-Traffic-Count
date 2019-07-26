@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="htc_siteGroup_form">
+            <field name="name">Site Group Form View</field>
+            <field name="model">htc.site.group</field>
+            <field name="arch" type="xml">
+              <form string="sitegroup">
+                 <header>
+                      <button string="Sensor Import" name="%(action_site_group_import)d" type="action" class="btn-primary" context="{'current_id': active_id}"/>
+                      <button string="Generate Issue" name="%(action_group_sensor_wizard_form)d" type="action" class="btn-primary" context="{'active_ids': active_id}"/>
+                  </header>
+                  <sheet>
+                      <group>
+                          <field name="site_group_name"  placeholder="Site Group Name"/>
+                          <field name="site_group_code"  attrs="{'readonly': [('id', '>', 0)]}" placeholder="Site Group Code"/>
+                          <field name="license_code" attrs="{'readonly': [('id', '>', 0)]}" placeholder="License Code"/>
+                      </group>
+                      <notebook>
+                        <page string="Sensors">
+                          <field name="sensor_ids">
+                            <tree create="false" delete="false" editable="false">
+                              <field name="mac_address" readonly="1" width="80px"/>
+                              <field name="device_name" readonly="1"/>
+                              <field name="xml_format" readonly="1"/>
+                              <field name="site_code" readonly="1"/>
+                              <field name="status" readonly="1"/>
+                            </tree>
+                          </field>
+                        </page>
+                    </notebook>
+                  </sheet>
+                </form>
+            </field>
+          </record>
+         <record model="ir.ui.view" id="htc_sitegroup_tree">
+            <field name="name">Site Group Tree View</field>
+            <field name="model">htc.site.group</field>
+            <field name="arch" type="xml">
+               <tree>
+                    <field name="site_group_name" />
+                    <field name="site_group_code" />
+                </tree>
+            </field>
+        </record>
+    </data>
+</odoo>
