@@ -6,4 +6,6 @@ access_htc_group,htc.group,model_htc_group,,1,1,1,1
 access_htc_group_sensors,htc.group_sensors,model_htc_group_sensors,,1,1,1,1
 access_htc_sensor_transaction,htc.sensor_transaction,model_htc_sensor_transaction,,1,1,1,1
 access_htc_daily_counter,htc_daily_counter,model_htc_daily_counter,,1,1,1,1
+access_htc_sensor_site,htc_sensor_sties,model_htc_sensor_sites,,1,1,1,1
 access_htc_site_group_wizard,htc.site.group.wizard,model_htc_site_group_wizard,,1,1,1,1
+access_import_site_group,import.site_group,model_import_site_group,,1,1,1,1
