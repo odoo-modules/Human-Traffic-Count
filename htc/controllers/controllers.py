@@ -4,6 +4,7 @@ from odoo.http import Response
 import datetime
 import logging
 import ipaddress
+_logger = logging.getLogger(__name__)
 
 
 class Htc(http.Controller):
@@ -11,7 +12,8 @@ class Htc(http.Controller):
     def list(self, **kw):
         try:
             data = kw.get('data', False)
-            mac_address = data
+            mac_address = data.get('mac_address')
+            file_name = data.get('file_name')
             sensor = http.request.env['htc.sensor'].search(
                 [("mac_address", "=", mac_address)], limit=1)
             if (sensor.id > 0):
@@ -23,7 +25,6 @@ class Htc(http.Controller):
                 http.Response.status = "200"
                 return None
         except Exception as e:
-            _logger = logging.getLogger(__name__)
             _logger.error("Error seraching sensor with Mac-Address %s in %s ",
                           mac_address, file_name)
             http.Response.status = "400"
@@ -37,7 +38,6 @@ class Htc(http.Controller):
                 csrf=False)
     def object(self, **kw):
         try:
-
             data = kw.get('data', False)
             first_obj = data[0]
             file_name = first_obj.get('file_name')
@@ -62,8 +62,8 @@ class Htc(http.Controller):
             valid_ip = list(filter(lambda x: x == ip_address, extract_ip_list))
             if len(valid_ip) > 0:
                 date_string = data[0].get('transaction_date').split('T')[0]
-                day = datetime.datetime.strptime(date_string, '%Y-%m-%d')
-                # dt = datetime.datetime.strptime(date_string, '%Y-%m')
+                # day = datetime.datetime.strptime(date_string, '%Y-%m-%d')
+                dt = datetime.datetime.strptime(date_string, '%Y-%m')
                 week = day.isocalendar()[1]
                 dayNumber = day.weekday()
                 for obj in data:
@@ -103,7 +103,6 @@ class Htc(http.Controller):
                 sensor.serial_number = serial_number
                 sensor.sensor_name = sensor_name
             else:
-                _logger = logging.getLogger(__name__)
                 _logger.error("Invalid IP Address Range in %s",
                               file_name,
                               exc_info=1)
@@ -111,12 +110,11 @@ class Htc(http.Controller):
                 http.Response.content_type = "application/json"
                 return "Application Error"
         except Exception as e:
-            _logger = logging.getLogger(__name__)
-            _logger.error("Error in inserting sensor transaction in %s",
-                          file_name + str(e),
-                          exc_info=1)
+            http.request.env['htc.sensor_transaction'].log_transaction_error(
+                file_name)
             http.Response.status = "400"
             http.Response.content_type = 'application/json'
             return "system error"
-
+        http.Response.status = '200'
+        http.Response.content_type = 'application/json'
         return "successfully inserted"
