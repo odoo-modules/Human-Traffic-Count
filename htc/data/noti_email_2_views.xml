@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="notify_human_traffic_count_2" model="mail.template">
+            <field name="name">HTC Mail_For_Count_2</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="email_from">mimssecurityadmin@zandotech.com</field>
+            <field name="subject">Notify HTC Mail</field>
+            <field name="email_to">yarkyawsoe@zandotech.com</field>
+            <field name="auto_delete" eval="True"/>
+           <field name="body_html">
+                <![CDATA[
+                test
+	    ]]></field>
+        </record>
+    </data>
+</odoo>

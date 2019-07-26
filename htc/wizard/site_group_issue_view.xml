@@ -1,0 +1,35 @@
+<odoo>
+  <data>
+    <record model="ir.ui.view" id="view_group_sensor_form">
+      <field name="name">Site Group Sensors</field>
+      <field name="model">htc.site.group.wizard</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <group>
+                <field name="site_id"/>
+              </group>
+              <group>
+              </group>
+            </group>
+            <field name="sensor_ids">
+              <tree>
+                <field name="sensor_mac_address"/>
+                <field name="site_id"/>
+              </tree>
+            </field>
+          </sheet>
+        </form>
+      </field>
+    </record>
+   <record id="action_group_sensor_wizard_form" model="ir.actions.act_window">
+     <field name="name">Site Group Sensors</field>
+     <field name="res_model">htc.site.group.wizard</field>
+     <field name="view_type">form</field>
+     <field name="view_mode">tree,form</field>
+     <field name="view_id" ref="view_group_sensor_form"/> 
+     <field name="target">new</field>
+    </record>
+  </data>
+</odoo>

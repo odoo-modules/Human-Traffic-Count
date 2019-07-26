@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <menuitem name="Human Traffic Count" id="htc_root_menu" web_icon="htc,static/description/icon.png"/>
+
+        <record model="ir.actions.act_window" id="action_htc_siteGroup">
+            <field name="name">Site Groups</field>
+            <field name="res_model">htc.sitegroup</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_htc_site">
+            <field name="name">Sites</field>
+            <field name="res_model">htc.site</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_htc_group">
+            <field name="name">Groups</field>
+            <field name="res_model">htc.group</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_htc_sensor">
+            <field name="name">Sensors</field>
+            <field name="res_model">htc.sensor</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+         <record model="ir.actions.act_window" id="action_htc_group_sensor">
+            <field name="name">Groups Sensor</field>
+            <field name="res_model">htc.group_sensors</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem name="Site Groups" id="htc_siteGroup_menu" parent="htc_root_menu"
+                  sequence="1" action="action_htc_siteGroup"/>
+
+        <menuitem name="Sites" id="htc_site_menu" parent="htc_root_menu"
+                  sequence="2" action="action_htc_site"/>
+
+        <menuitem name="Group" id="htc_group_menu" parent="htc_root_menu"
+                  sequence="3" action="action_htc_group"/>
+
+        <menuitem name="Sensors" id="htc_sensor_menu" parent="htc_root_menu"
+                  sequence="4" action="action_htc_sensor"/>
+
+        <menuitem name="Group Sensors" id="htc_group_sensor_menu" parent="htc_root_menu"
+                  sequence="5" action="action_htc_group_sensor"/>
+
+    </data>
+</odoo>

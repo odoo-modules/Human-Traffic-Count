@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="htc_group_sensor_form">
+            <field name="name">Group Sensors Form View</field>
+            <field name="model">htc.group_sensors</field>
+            <field name="arch" type="xml">
+                <form string="group_sensors">
+                    <sheet>
+                        <group>
+                            <field name="group_id" widget="selection" attrs="{'required' : True}" placeholder="Group"/>
+                            <field name="sensor_id" widget="selection" attrs="{'required' : True}" placeholder="Sensor"/>
+                            <field name="enable_alert"/>
+                            <field name="in_status" widget="selection" placeholder="Group In"/>
+                            <field name="inform_limit_count" widget="mask" data-inputmask="'mask': '9','repeat': 5, 'greedy' : false" attrs="{'readonly': [('enable_alert', '=', False)]}"/>
+                        </group>  
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"
+                               groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread" placeholder="Share a message..."/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="view_group_sensors_tree" model="ir.ui.view">
+            <field name="name">htc.group_sensors.tree</field>
+            <field name="model">htc.group_sensors</field>
+            <field name="priority">5</field>
+            <field name="arch" type="xml">
+                <tree string="group_sensors">
+                    <field name="group_id"/>
+                    <field name="sensor_id"/>
+                    <field name="in_status"/>
+                    <field name="inform_limit_count"/>
+                    <field name="enable_alert"/>
+                </tree>
+            </field>
+        </record>
+    </data>
+</odoo>
