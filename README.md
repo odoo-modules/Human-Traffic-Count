@@ -30,3 +30,24 @@ Human Traffic Count (HTC)
     },
     "editor.formatOnSave": true
 }
+
+#Sample Launch.json for vscode
+
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python",
+            "type": "python",
+            "request": "launch",
+            "stopOnEntry": false,
+            "pythonPath": "your pyton.exe path",
+            "program": "your odoo bin path",
+            //your odoo configuration file path
+            "args": [
+                "-c${workspaceRoot}\\odoo.conf"
+            ],
+            "cwd": "${workspaceRoot}",
+        }
+    ],
+}
