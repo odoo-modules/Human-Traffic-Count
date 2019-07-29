@@ -51,11 +51,12 @@ class Htc(http.Controller):
             software_version = first_obj.get('software_version')
             serial_number = first_obj.get('serial_number')
             sensor_name = first_obj.get('name')
+            mac_address = first_obj.get('mac_address')
 
             sensor = http.request.env['htc.sensor'].search(
-                [("id", "=", site_id)], limit=1)
-            site = http.request.env['htc.site'].search([("id", "=", site_id)],
-                                                       limit=1)
+                [("mac_address", "=", mac_address)], limit=1)
+            site = http.request.env['htc.site'].search(
+                [("site_code", "=", site_id)], limit=1)
             ipList = list(ipaddress.ip_network(site.ip_range, False).hosts())
             extract_ip_list = list(map(lambda x: x.compressed, ipList))
 
@@ -69,7 +70,7 @@ class Htc(http.Controller):
                 for obj in data:
                     http.request.env['htc.sensor_transaction'].create({
                         'site_id':
-                        obj.get('site_id'),
+                        site.id,
                         'sensor_id':
                         obj.get('sensor_id'),
                         'transaction_date':

@@ -8,11 +8,12 @@ class Group(models.Model):
     _inherit = 'mail.thread'
     name = fields.Char("Group Name", required=True)
     code = fields.Char("Group Code", required=True)
-    site_id = fields.Many2one("htc.site",  string="Site", requierd=True)
-    group_sensor_ids = fields.One2many('htc.group_sensors', "group_id", string="Group Sensors")
-    _sql_constraints = [
-        ('code_unique', 'unique(site_id,code)', "Can't be duplicate value for Site and Group Code!")
-    ]
+    site_id = fields.Many2one("htc.site", string="Site", requierd=True)
+    group_sensor_ids = fields.One2many('htc.group_sensors',
+                                       "group_id",
+                                       string="Group Sensors")
+    _sql_constraints = [('code_unique', 'unique(site_id,code)',
+                         "Can't be duplicate value for Site and Group Code!")]
 
     @api.onchange('code')
     def do_stuff(self):
@@ -28,4 +29,3 @@ class Group(models.Model):
             code = record.code
             result.append((record.id, code))
         return result
-

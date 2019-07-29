@@ -36,6 +36,8 @@ class Sensor(models.Model):
         result = []
         for record in self:
             mac_address = record.mac_address
+            if record.device_name:
+                mac_address = record.device_name + " | " + mac_address
             result.append((record.id, mac_address))
         return result
 
