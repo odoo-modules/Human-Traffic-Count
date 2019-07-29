@@ -39,7 +39,7 @@ class NotificationEmail(models.Model):
         domain = [('name', 'ilike', 'HTC Notify')]
         to_emails = []
         process_count = record.process_count
-        device_id = record.sensor_id.device_id
+        device_id = record.sensor_id.device_name
         user_name = partner = None
         # .['sensor'].device_id
         template = self.env['mail.template'].search(domain, limit=1)

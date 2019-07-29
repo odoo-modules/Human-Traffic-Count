@@ -11,7 +11,17 @@
                             <field name="name"  placeholder="Site Group Name"/>
                             <field name="code"  attrs="{'readonly': [('id', '>', 0)]}" placeholder="Group Code"/>
                             <field name="site_id" widget="selection" placeholder="Site"/>
-                        </group>    
+                        </group>
+                        <notebook>
+                        <page string="Sensors">
+                          <field name="group_sensor_ids">
+                            <tree>
+                             <field name="sensor_id"/>
+                              <field name="in_status"/>
+                            </tree>
+                          </field>
+                        </page>
+                    </notebook>    
                     </sheet>
                     <div class="oe_chatter">
                         <field name="message_follower_ids" widget="mail_followers"
