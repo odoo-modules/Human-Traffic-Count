@@ -12,7 +12,7 @@
                                 placeholder="Site Group Code" attrs="{'required' : True}"/>
                             <!-- <field name="prefix" attrs="{'readonly': True}"/> -->
                             <field name="site_name"  placeholder="Site Name"/>
-                            <field name="site_code"  widget="mask" data-inputmask="'mask': '9','repeat': 5, 'greedy' : false" attrs="{'readonly': [('id', '>', 0)]}" placeholder="Site Code"/>
+                            <field name="site_code" attrs="{'readonly': [('id', '>', 0)]}" placeholder="Site Code"/>
                             <field name="delivery_method"/>
                             <field name="server_address" placeholder="Web API/SMTP Server Address"/>
                             <field name="user_id"/>

@@ -16,7 +16,6 @@
         'views/site_group_views.xml',
         'views/group_sensors_views.xml',
         'data/noti_email_views.xml',
-        'data/noti_email_2_views.xml',
         'views/sensor_transaction_views.xml',
         'views/sensor_site_views.xml',
         'views/import_site_group_view.xml'

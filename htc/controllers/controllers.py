@@ -79,19 +79,19 @@ class Htc(http.Controller):
                                     if record.in_status == 5:
                                         if daily_counter.daily_total_in > record.inform_limit_count * daily_counter.alert_count:
                                             daily_counter.alert_count = daily_counter.alert_count + 1
-                                            # http.request.env[
-                                            #     'htc.notification_email'].email_notify(
-                                            #         record, daily_counter.
-                                            #         daily_total_in, 'In',
-                                            #         record.inform_limit_count)
+                                            http.request.env[
+                                                'htc.notification_email'].email_notify(
+                                                    record, daily_counter.
+                                                    daily_total_in, 'In',
+                                                    record.inform_limit_count)
                                     else:
                                         if daily_counter.daily_total_out > record.inform_limit_count * daily_counter.alert_count:
                                             daily_counter.alert_count = daily_counter.alert_count + 1
-                                            # http.request.env[
-                                            #     'htc.notification_email'].email_notify(
-                                            #         record, daily_counter.
-                                            #         daily_total_out, 'Out',
-                                            #         record.inform_limit_count)
+                                            http.request.env[
+                                                'htc.notification_email'].email_notify(
+                                                    record, daily_counter.
+                                                    daily_total_out, 'Out',
+                                                    record.inform_limit_count)
                     else:
                         daily_counter.transaction_date = day
                         daily_counter.daily_total_in = total_in
@@ -103,19 +103,19 @@ class Htc(http.Controller):
                                     if record.in_status == 5:
                                         if daily_counter.daily_total_in > record.inform_limit_count * daily_counter.alert_count:
                                             daily_counter.alert_count = daily_counter.alert_count + 1
-                                            # http.request.env[
-                                            #     'htc.notification_email'].email_notify(
-                                            #         record, daily_counter.
-                                            #         daily_total_in, 'In',
-                                            #         record.inform_limit_count)
+                                            http.request.env[
+                                                'htc.notification_email'].email_notify(
+                                                    record, daily_counter.
+                                                    daily_total_in, 'In',
+                                                    record.inform_limit_count)
                                     else:
                                         if daily_counter.daily_total_out > record.inform_limit_count * daily_counter.alert_count:
                                             daily_counter.alert_count = daily_counter.alert_count + 1
-                                            # http.request.env[
-                                            #     'htc.notification_email'].email_notify(
-                                            #         record, daily_counter.
-                                            #         daily_total_out, 'Out',
-                                            #         record.inform_limit_count)
+                                            http.request.env[
+                                                'htc.notification_email'].email_notify(
+                                                    record, daily_counter.
+                                                    daily_total_out, 'Out',
+                                                    record.inform_limit_count)
                 else:
                     notify_count = 1
                     if sensor.group_sensor_ids:

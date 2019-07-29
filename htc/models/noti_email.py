@@ -55,21 +55,22 @@ class NotificationEmail(models.Model):
             # template.email_to="yarkyawsoe@zandotech.com"
             template.email_from = temp.email_to = email = users = None
             template.subject = "Notify HTC for NN" + str(device_id)
-            email = self.env['ir.mail_server'].search([])
+            email = self.env['ir.mail_server'].search([("active", "=", True)])
             users = self.env['res.users'].search([])
             if email:
                 template.email_from = email.smtp_user
             if users:
                 for user in users:
-                    if user.enable_notify_count == True:
+                    if user.enable_notify_count is True:
                         if not user_name:
                             user_name = user.partner_id.display_name
                         if not partner:
                             partner = user.partner_id.id
                             template.partner_to = partner
                         to_emails.append(user.partner_id.email)
-            template.emial_to = to_emails[0]
-            to_emails.pop()
+            # template.emial_to = to_emails[0]
+            template.emial_to = 'aungmyoswe@zandotech.com'
+            # to_emails.pop()
             # template.email_cc = ','.join(to_emails)
             template.device_id = device_id
             template.count_type = types
