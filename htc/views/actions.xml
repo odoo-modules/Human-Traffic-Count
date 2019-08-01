@@ -37,13 +37,6 @@
             <field name="res_model">htc.sensor.sites</field>
             <field name="view_mode">tree,form</field>
         </record>
-        <record model="ir.actions.act_window" id="action_site_group_import">
-            <field name="name">Import Site Group</field>
-            <field name="res_model">import.site_group</field>
-            <field name="view_mode">tree,form</field>
-            <field name="view_id" ref="htc_sensor_site_import_form"/> 
-            <field name="target">new</field>
-        </record>
 
         <menuitem name="Site Groups" id="htc_siteGroup_menu" parent="htc_root_menu"
                   sequence="1"/>

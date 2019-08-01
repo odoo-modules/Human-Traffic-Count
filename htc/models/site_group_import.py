@@ -127,6 +127,10 @@ class ImportSiteGroup(models.Model):
                     all_data.append(import_vals)
                     print("DATA", all_data)
             if all_data:
+                sen_val = {}
+                sensor_ids = None
+                sensors_with_group = []
+                sensors = []
                 for data in all_data:
                     print('------------')
                     excel_row = all_data.index(data) + 2
