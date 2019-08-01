@@ -9,5 +9,7 @@ class DailyCounter(models.Model):
     sensor_id = fields.Many2one("htc.sensor", string="Sensor", required=True)
     transaction_date = fields.Date("Transaction Date", required=True)
     daily_total_in = fields.Integer("Daily Total In", required=True, default=0)
-    daily_total_out = fields.Integer("Daily Total Out", required=True, default=0)
+    daily_total_out = fields.Integer("Daily Total Out",
+                                     required=True,
+                                     default=0)
     alert_count = fields.Integer("Alert Count", required=True, default=0)
