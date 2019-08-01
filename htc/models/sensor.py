@@ -34,6 +34,9 @@ class Sensor(models.Model):
                               store=False,
                               compute="get_site")
     status = fields.Boolean("Active/Inactive", compute="get_status")
+    group_sensor_ids = fields.One2many("htc.group_sensors",
+                                       "sensor_id",
+                                       string="Group")
 
     @api.multi
     def name_get(self):
