@@ -10,10 +10,9 @@ class SiteGroup(models.Model):
     site_group_name = fields.Char("Site Group Name", required=True)
     site_group_code = fields.Char("Site Group Code", required=True)
     license_code = fields.Char("Site Group License Code", required=True)
-    sensor_ids = fields.One2many("htc.sensor","site_group_id","Sensors")
-    _sql_constraints = [
-        ('site_group_code_unique', 'unique(site_group_code)', "Can't be duplicate value for Site Group Code!")
-    ]
+    sensor_ids = fields.One2many("htc.sensor", "site_group_id", "Sensors")
+    _sql_constraints = [('site_group_code_unique', 'unique(site_group_code)',
+                         "Can't be duplicate value for Site Group Code!")]
 
     @api.onchange('site_group_code')
     def do_stuff(self):
@@ -29,5 +28,3 @@ class SiteGroup(models.Model):
             code = record.site_group_code
             result.append((record.id, code))
         return result
-
-

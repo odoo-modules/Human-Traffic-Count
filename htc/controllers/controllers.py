@@ -4,6 +4,7 @@ from odoo.http import Response
 import datetime
 import logging
 import ipaddress
+_logger = logging.getLogger(__name__)
 
 
 class Htc(http.Controller):
@@ -11,7 +12,8 @@ class Htc(http.Controller):
     def list(self, **kw):
         try:
             data = kw.get('data', False)
-            mac_address = data
+            mac_address = data.get('mac_address')
+            file_name = data.get('file_name')
             sensor = http.request.env['htc.sensor'].search(
                 [("mac_address", "=", mac_address)], limit=1)
             if (sensor.id > 0):
@@ -23,7 +25,6 @@ class Htc(http.Controller):
                 http.Response.status = "200"
                 return None
         except Exception as e:
-            _logger = logging.getLogger(__name__)
             _logger.error("Error seraching sensor with Mac-Address %s in %s ",
                           mac_address, file_name)
             http.Response.status = "400"
@@ -37,7 +38,7 @@ class Htc(http.Controller):
                 csrf=False)
     def object(self, **kw):
         try:
-
+            today = datetime.datetime.today().date()
             data = kw.get('data', False)
             first_obj = data[0]
             file_name = first_obj.get('file_name')
@@ -51,15 +52,103 @@ class Htc(http.Controller):
             software_version = first_obj.get('software_version')
             serial_number = first_obj.get('serial_number')
             sensor_name = first_obj.get('name')
+            mac_address = first_obj.get('mac_address')
+            date_string = data[0].get('transaction_date').split('T')[0]
+            day = datetime.datetime.strptime(date_string, '%Y-%m-%d')
 
             sensor = http.request.env['htc.sensor'].search(
-                [("id", "=", site_id)], limit=1)
-            site = http.request.env['htc.site'].search([("id", "=", site_id)],
-                                                       limit=1)
+                [("mac_address", "=", mac_address)], limit=1)
+            site = http.request.env['htc.site'].search(
+                [("site_code", "=", site_id)], limit=1)
             ipList = list(ipaddress.ip_network(site.ip_range, False).hosts())
             extract_ip_list = list(map(lambda x: x.compressed, ipList))
-
+            total_in = sum(map(lambda x: int(x.get("in_count")), data))
+            total_out = sum(map(lambda x: int(x.get("out_count")), data))
             valid_ip = list(filter(lambda x: x == ip_address, extract_ip_list))
+            if today == day.date():
+                daily_counter = http.request.env['htc.daily_counter'].search(
+                    [("sensor_id", "=", sensor_id), ("site_id", "=", site.id)],
+                    limit=1)
+                if daily_counter:
+                    if daily_counter.transaction_date == day.date():
+                        daily_counter.daily_total_in = daily_counter.daily_total_in + total_in
+                        daily_counter.daily_total_out = daily_counter.daily_total_out + total_out
+                        if sensor.group_sensor_ids:
+                            for record in sensor.group_sensor_ids:
+                                if record.enable_alert:
+                                    if record.in_status == 5:
+                                        if daily_counter.daily_total_in > record.inform_limit_count * daily_counter.alert_count:
+                                            daily_counter.alert_count = daily_counter.alert_count + 1
+                                            http.request.env[
+                                                'htc.notification_email'].email_notify(
+                                                    record, daily_counter.
+                                                    daily_total_in, 'In',
+                                                    record.inform_limit_count)
+                                    else:
+                                        if daily_counter.daily_total_out > record.inform_limit_count * daily_counter.alert_count:
+                                            daily_counter.alert_count = daily_counter.alert_count + 1
+                                            http.request.env[
+                                                'htc.notification_email'].email_notify(
+                                                    record, daily_counter.
+                                                    daily_total_out, 'Out',
+                                                    record.inform_limit_count)
+                    else:
+                        daily_counter.transaction_date = day
+                        daily_counter.daily_total_in = total_in
+                        daily_counter.daily_total_out = total_out
+                        daily_counter.alert_count = 1
+                        if sensor.group_sensor_ids:
+                            for record in sensor.group_sensor_ids:
+                                if record.enable_alert:
+                                    if record.in_status == 5:
+                                        if daily_counter.daily_total_in > record.inform_limit_count * daily_counter.alert_count:
+                                            daily_counter.alert_count = daily_counter.alert_count + 1
+                                            http.request.env[
+                                                'htc.notification_email'].email_notify(
+                                                    record, daily_counter.
+                                                    daily_total_in, 'In',
+                                                    record.inform_limit_count)
+                                    else:
+                                        if daily_counter.daily_total_out > record.inform_limit_count * daily_counter.alert_count:
+                                            daily_counter.alert_count = daily_counter.alert_count + 1
+                                            http.request.env[
+                                                'htc.notification_email'].email_notify(
+                                                    record, daily_counter.
+                                                    daily_total_out, 'Out',
+                                                    record.inform_limit_count)
+                else:
+                    notify_count = 1
+                    if sensor.group_sensor_ids:
+                        for record in sensor.group_sensor_ids:
+                            if record.enable_alert:
+                                if record.in_status == 5:
+                                    if total_in > record.inform_limit_count * notify_count:
+                                        notify_count = notify_count + 1
+                                        # http.request.env[
+                                        #     'htc.notification_email'].email_notify(
+                                        #         record, total_in, 'In',
+                                        #         record.inform_limit_count)
+                                else:
+                                    if total_out > record.inform_limit_count * notify_count:
+                                        notify_count = notify_count + 1
+                                        # http.request.env[
+                                        #     'htc.notification_email'].email_notify(
+                                        #         record, total_out, 'Out',
+                                        #         record.inform_limit_count)
+                    http.request.env['htc.daily_counter'].create({
+                        'site_id':
+                        site.id,
+                        'sensor_id':
+                        sensor.id,
+                        'transaction_date':
+                        day,
+                        'daily_total_in':
+                        total_in,
+                        'daily_total_out':
+                        total_out,
+                        'alert_count':
+                        notify_count
+                    })
             if len(valid_ip) > 0:
                 date_string = data[0].get('transaction_date').split('T')[0]
                 day = datetime.datetime.strptime(date_string, '%Y-%m-%d')
@@ -69,7 +158,7 @@ class Htc(http.Controller):
                 for obj in data:
                     http.request.env['htc.sensor_transaction'].create({
                         'site_id':
-                        obj.get('site_id'),
+                        site.id,
                         'sensor_id':
                         obj.get('sensor_id'),
                         'transaction_date':
@@ -103,7 +192,6 @@ class Htc(http.Controller):
                 sensor.serial_number = serial_number
                 sensor.sensor_name = sensor_name
             else:
-                _logger = logging.getLogger(__name__)
                 _logger.error("Invalid IP Address Range in %s",
                               file_name,
                               exc_info=1)
@@ -111,12 +199,11 @@ class Htc(http.Controller):
                 http.Response.content_type = "application/json"
                 return "Application Error"
         except Exception as e:
-            _logger = logging.getLogger(__name__)
-            _logger.error("Error in inserting sensor transaction in %s",
-                          file_name + str(e),
-                          exc_info=1)
+            http.request.env['htc.sensor_transaction'].log_transaction_error(
+                file_name)
             http.Response.status = "400"
             http.Response.content_type = 'application/json'
             return "system error"
-
+        http.Response.status = '200'
+        http.Response.content_type = 'application/json'
         return "successfully inserted"

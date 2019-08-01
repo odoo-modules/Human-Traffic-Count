@@ -43,6 +43,7 @@
                     <field name="site_code"/>
                 </tree>
             </field>
+            
         </record>
     </data>
 </odoo>

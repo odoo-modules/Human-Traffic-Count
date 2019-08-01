@@ -7,7 +7,7 @@
             <field name="arch" type="xml">
               <form string="sitegroup">
                  <header>
-                      <button string="Sensor Import" name="%(action_site_group_import)d" type="action" class="btn-primary" context="{'current_id': active_id}"/>
+                      <button string="Sensor Import" name="%(htc.action_site_group_import)d" type="action" class="btn-primary" context="{'current_id': active_id}"/>
                       <button string="Generate Issue" name="%(action_group_sensor_wizard_form)d" type="action" class="btn-primary" context="{'active_ids': active_id}"/>
                   </header>
                   <sheet>
