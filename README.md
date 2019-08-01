@@ -2,7 +2,7 @@
 Human Traffic Count (HTC)
 
 #Sample Vscode workspace setting
-
+```javascript
 {
     "python.autoComplete.extraPaths": [
         "${workspaceRoot}/addons",
@@ -30,9 +30,10 @@ Human Traffic Count (HTC)
     },
     "editor.formatOnSave": true
 }
+```
 
 #Sample Launch.json for vscode
-
+```javascript
 {
     "version": "0.2.0",
     "configurations": [
@@ -51,3 +52,4 @@ Human Traffic Count (HTC)
         }
     ],
 }
+``
