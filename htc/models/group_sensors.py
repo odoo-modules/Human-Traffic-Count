@@ -41,7 +41,7 @@ class GroupSensors(models.Model):
     def name_get(self):
         result = []
         for record in self:
-            gp_sensor_description = record.group_id.code + '-' + record.sensor_id.sensor_mac_address
+            gp_sensor_description = record.group_id.code + '-' + record.sensor_id.mac_address
             result.append((record.id, gp_sensor_description))
         return result
 

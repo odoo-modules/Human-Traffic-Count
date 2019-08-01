@@ -23,7 +23,7 @@ class NotificationEmail(models.Model):
                 template.email_from = email.smtp_user
             if users:
                 for user in users:
-                    if user.enable_notify_count == True:
+                    if user.enable_notify_count is True:
                         if not user_name:
                             user_name = user.partner_id.display_name
                         if not partner:
@@ -47,6 +47,7 @@ class NotificationEmail(models.Model):
         else:
             return False
 
+
 class MailTemplate(models.Model):
     _inherit = "mail.template"
 
@@ -56,10 +57,12 @@ class MailTemplate(models.Model):
     process_count = fields.Integer("Inform Count", store=False)
     process_limit_count = fields.Integer("Limit Count", store=False)
 
+
 class Users(models.Model):
     _inherit = "res.users"
 
-    enable_notify_count = fields.Boolean("Enable Notify Count?", default=False, store=True)
+    enable_notify_count = fields.Boolean("Enable Notify Count?", default=False,store=True)
+
 
 class Message(models.Model):
     _inherit = 'mail.message'
@@ -68,10 +71,10 @@ class Message(models.Model):
     def _get_record_name(self, values):
         """ Return the related document name, using name_get. It is done using
             SUPERUSER_ID, to be sure to have the record name correctly stored. """
-        print ("values", values)
+        print("values", values)
         model = values.get('model', self.env.context.get('default_model'))
         res_id = values.get('res_id', self.env.context.get('default_res_id'))
         if not model or not res_id or model not in self.env:
             return False
-        print ('MAIL MSG', self.env[model].sudo().browse(res_id).name_get()[0][1])
+        print('MAIL MSG', self.env[model].sudo().browse(res_id).name_get()[0][1])
         return self.env[model].sudo().browse(res_id).name_get()[0][1]
