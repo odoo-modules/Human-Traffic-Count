@@ -20,6 +20,7 @@
                             <field name="software_release"  placeholder="Software Version"/>
                             <field name="host_name"  placeholder="Host Name"/>
                             <field name="ip_address"  placeholder="IP Address"/>
+                            <field name="site_id"/>
                         </group>
                     </sheet>
                     <div class="oe_chatter">
@@ -40,7 +41,8 @@
                     <field name="mac_address" />
                     <field name="device_name"/>
                     <field name="xml_format"/>
-                    <field name="site_code"/>
+                    <field name="site_id"/>
+                    <!-- <field name="site_code"/> -->
                 </tree>
             </field>
         </record>

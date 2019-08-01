@@ -23,8 +23,9 @@
                               <field name="mac_address" readonly="1" width="80px"/>
                               <field name="device_name" readonly="1"/>
                               <field name="xml_format" readonly="1"/>
-                              <field name="site_code" readonly="1"/>
+                              <field name="site_id" readonly="1"/>
                               <field name="status" readonly="1"/>
+                              <!--<field name="site_code" readonly="1"/>-->
                             </tree>
                           </field>
                         </page>

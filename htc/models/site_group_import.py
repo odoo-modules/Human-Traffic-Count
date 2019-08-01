@@ -130,26 +130,56 @@ class ImportSiteGroup(models.Model):
                 sen_val = {}
                 sensor_ids = None
                 sensors_with_group = []
+                site_group = []
                 sensors = []
                 for data in all_data:
+                    active = False
+                    sensors_with_group = []
+                    site_group = []
+                    sensors = []
                     print('------------')
                     excel_row = all_data.index(data) + 2
                     print('excel row => ' + str(excel_row))
                     print('data ' + str(data))
                     print(data)
-                    sen_val = {}
                     mac_address = data['Mac Address']
                     xml_format = data['XML Format']
                     if mac_address and xml_format:
                         sensor_ids = sensor_obj.search([
-                            ('mac_address', 'ilike', mac_address)
+                            ('mac_address', 'ilike', mac_address),
+                            ('site_group_id', '=', site_group_id.id)
                         ])
+                        sensors_with_group.append(sensor_ids.mac_address)
+                        site_group.append(
+                            sensor_ids.site_group_id.site_group_name)
+                        if sensor_ids.status == True:
+                            active = True
+                    sensor_id = sensor_obj.search([('mac_address', 'ilike',
+                                                    mac_address)])
+                    if sensor_id:
+                        for s in sensor_id:
+                            sensors = []
+                            print("s", s)
+                            sensors.append(s.mac_address)
+                            print("mac address", s.mac_address)
+                if active == True:
+                    raise ValidationError(
+                        _("Please 'Inactive' the sensors of Mac Address %s  in %s Site Group."
+                          ) % (sensors_with_group[0], site_group[0]))
+                elif sensors_with_group != [False]:
+                    raise ValidationError(
+                        _("Please already exit the sensors of Mac Address %s in %s Site Group."
+                          ) % (sensors_with_group[0], site_group[0]))
+                else:
+                    print("sens", sensors, sensors_with_group)
+                    if sensors != []:
+                        raise ValidationError(
+                            _("Importing Sensor already exit check the sensors of Mac Address %s ."
+                              ) % sensors[0])
+                    else:
                         sen_val = {
                             'mac_address': mac_address,
                             'xml_format': xml_format,
                             'site_group_id': site_group_id.id,
                         }
-                        if not sensor_ids:
-                            sensor_obj.create(sen_val)
-                        else:
-                            sensor_ids.write(sen_val)
+                        sensor_obj.create(sen_val)

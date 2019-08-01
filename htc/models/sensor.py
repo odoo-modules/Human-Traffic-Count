@@ -28,7 +28,11 @@ class Sensor(models.Model):
     ip_address = fields.Char("IP Address")
     sensor_site_ids = fields.One2many("htc.sensor.sites", "sensor_id",
                                       "Sensor_Site")
-    site_code = fields.Char(compute="get_site", store=False, string="Site")
+    # site_code = fields.Char(compute="get_site", store=False, string="Site")
+    site_id = fields.Many2one("htc.site",
+                              "Site",
+                              store=False,
+                              compute="get_site")
     status = fields.Boolean("Active/Inactive", compute="get_status")
 
     @api.multi
@@ -45,7 +49,8 @@ class Sensor(models.Model):
         for ssi in self.mapped('sensor_site_ids'):
             if ssi.status is True:
                 for record in self:
-                    record.site_code = ssi.site_id.site_code
+                    # record.site_code = ssi.site_id.site_code
+                    record.site_id = ssi.site_id
 
     @api.one
     @api.depends('sensor_site_ids')
@@ -54,9 +59,3 @@ class Sensor(models.Model):
             if ssi.status is True:
                 for record in self:
                     record.status = True
-        # result = []
-        # for record in self:
-        #     if record.sensor_site_ids and record.sensor_site_ids[0].site_id:
-        #         record.site_code=record.sensor_site_ids[0].site_id.site_code
-        #     else:
-        #         record.site_code=''

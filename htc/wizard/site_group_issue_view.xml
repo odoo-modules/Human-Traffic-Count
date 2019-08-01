@@ -17,7 +17,8 @@
             <field name="sensor_ids">
               <tree>
                 <field name="mac_address"/>
-                <field name="site_code"/>
+                <field name="site_id"/>
+                <!-- <field name="site_code"/> -->
                 <field name="status"/>
               </tree>
             </field>

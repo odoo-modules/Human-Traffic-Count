@@ -1,0 +1,23 @@
+<odoo>
+  <data>
+    <record model="ir.ui.view" id="view_ir_logging_lists">
+      <field name="name">Logging Lists</field>
+      <field name="model">ir.logging</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="type"/>
+          <field name="level"/>
+          <field name="message"/>
+        </tree>
+      </field>
+    </record>
+   <record id="action_ir_logging" model="ir.actions.act_window">
+     <field name="name">Logging</field>
+     <field name="res_model">ir.logging</field>
+     <field name="view_type">form</field>
+     <field name="view_mode">tree,form</field>
+     <field name="view_id" ref="view_ir_logging_lists"/> 
+   </record>
+ </data>
+</odoo>

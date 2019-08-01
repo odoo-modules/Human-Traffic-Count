@@ -58,6 +58,9 @@
 
         <menuitem name="Group Sensors" id="htc_group_sensor_menu" parent="htc_root_menu"
                   sequence="6" action="action_htc_group_sensor"/>
+        
+         <menuitem name="Logging" id="ir_logging_menu" parent="htc_root_menu"
+                  sequence="7" action="action_ir_logging"/>
 
     </data>
 </odoo>

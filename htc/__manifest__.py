@@ -12,6 +12,7 @@
     'depends': ['base', 'web', 'mail', 'contacts'],
     'data': [
         'security/ir.model.access.csv',
+        'views/ir_logging_view.xml',
         'views/import_site_group_view.xml',
         'views/actions.xml',
         'views/sensor_views.xml',
