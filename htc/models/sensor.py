@@ -30,17 +30,12 @@ class Sensor(models.Model):
                                       "Sensor_Site")
     site_code = fields.Char(compute="get_site", store=False, string="Site")
     status = fields.Boolean("Active/Inactive", compute="get_status")
-    group_sensor_ids = fields.One2many("htc.group_sensors",
-                                       "sensor_id",
-                                       string="Group")
 
     @api.multi
     def name_get(self):
         result = []
         for record in self:
             mac_address = record.mac_address
-            if record.device_name:
-                mac_address = record.device_name + " | " + mac_address
             result.append((record.id, mac_address))
         return result
 

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 from odoo import api, fields, models
-import logging
 
 
 class SensorTransaction(models.Model):
@@ -19,10 +18,3 @@ class SensorTransaction(models.Model):
     method = fields.Char("Method")
     start_time = fields.Char("Start Time")
     end_time = fields.Char("End Time")
-
-    @api.multi
-    def log_transaction_error(self, file_name):
-        _logger = logging.getLogger(__name__)
-        _logger.error("Error on inserting sensor transaction in %s",
-                      file_name,
-                      exc_info=1)
