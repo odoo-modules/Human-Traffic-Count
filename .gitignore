@@ -106,5 +106,9 @@ venv.bak/
 #vscode
 .vscode/
 
-#conf
+# conf
 *.conf
+
+# .idea
+.idea/
+
