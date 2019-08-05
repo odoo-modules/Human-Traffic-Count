@@ -20,10 +20,10 @@ class GroupSensors(models.Model):
     out_status = fields.Integer("Group Out Status", required=True, default=10)
     enable_alert = fields.Boolean("Enable Alert", default=False)
     process_count = fields.Integer("Process Count", default=1)
-    current_counter_date = fields.Date('Current Counter Date',
-                                       required=True,
-                                       default=datetime.datetime(1990, 1,
-                                                                 1).date())
+    current_counter_date = fields.Date(
+        'Current Counter Date',
+        required=True,
+        default=datetime.datetime(1990, 1, 1).date())
     inform_limit_count = fields.Integer("Limit to Inform", default=0)
     _sql_constraints = [('group_sensors_unique', 'unique(group_id,sensor_id)',
                          "Can't be duplicate value for  Group and Sensor!")]
@@ -66,10 +66,9 @@ class GroupSensors(models.Model):
                             # self.mail_message()
                             while dailyCount.daily_total_in > record.inform_limit_count * record.process_count:
                                 record.process_count += 1
-                                self.env[
-                                    'htc.notification_email'].email_notify(
-                                        record, dailyCount.daily_total_in,
-                                        'In', record.inform_limit_count)
+                                self.env['htc.notification_email'].email_notify(
+                                    record, dailyCount.daily_total_in, 'In',
+                                    record.inform_limit_count)
                                 # self.mail_message(dailyCount.daily_total_in,record,self._cr,self._uid,self.ids,self._context)
                         elif record.in_status == 10 \
                                 and dailyCount.daily_total_out > record.inform_limit_count * record.process_count:
@@ -77,9 +76,8 @@ class GroupSensors(models.Model):
                             # self.mail_message(dailyCount.daily_total_out,record,self._cr,self._uid,self.ids,self._context)
                             while dailyCount.daily_total_out > record.inform_limit_count * record.process_count:
                                 record.process_count += 1
-                                self.env[
-                                    'htc.notification_email'].email_notify(
-                                        record, dailyCount.daily_total_ou,
-                                        'Out', record.inform_limit_count)
+                                self.env['htc.notification_email'].email_notify(
+                                    record, dailyCount.daily_total_ou, 'Out',
+                                    record.inform_limit_count)
                                 # self.mail_message(dailyCount.daily_total_out,record,self._cr,self._uid,self.ids,self._context)
                                 # self, count, record, cr, uid, ids, context = None
