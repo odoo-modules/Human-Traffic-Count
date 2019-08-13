@@ -40,10 +40,19 @@
             <field name="model">htc.site</field>
             <field name="arch" type="xml">
                <tree>
-                    <field name="site_group_id"/>
-                    <!-- <field name="prefix" /> -->
                     <field name="site_name"/>
                     <field name="site_code"/>
+                    <field name="server_address"/>
+                    <field name="user_id"/>
+                    <field name="password"/>
+                    <field name="ip_range"/>
+                    <field name="delivery_method"/>
+                    <field name="site_file_name_format"/>
+                    <field name="interface_code"/>
+                    <field name="http_port"/>
+                    <field name="https_port"/>
+                    <field name="debug_mode_enable"/>
+                    <field name="site_group_id"/>
                 </tree>
             </field>
             

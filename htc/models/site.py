@@ -87,7 +87,7 @@ class Site(models.Model):
             result.append((record.id, code))
         return result
 
-    @api.multi
+    @api.one
     @api.depends('file_name')
     def get_file_name(self):
         switcher = {
