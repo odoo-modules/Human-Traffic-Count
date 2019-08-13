@@ -68,7 +68,7 @@ class Site(models.Model):
     https_port = fields.Char("Https Port")
     timezone_name = fields.Char("Timezone Name")
     ip_range = fields.Char("IP Range", requierd=True)
-    interface_code = fields.Char("Interface Code", required=True)
+    interface_code = fields.Char("Interface Code")
     debug_mode_enable = fields.Boolean("Debug Mode Enable", default=False)
     # file_name = fields.Selection([("Site name", "#S"), ("Site Id", "#I"),
     #                               ("Date", "#D"), ("Time", "#T"),

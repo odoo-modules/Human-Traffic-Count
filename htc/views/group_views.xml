@@ -8,10 +8,18 @@
                 <form string="group">
                     <sheet>
                         <group>
-                        
                             <field name="name"  placeholder="Site Group Name"/>
                             <field name="code"  attrs="{'readonly': [('id', '>', 0)]}" placeholder="Group Code"/>
                             <field name="site_id" widget="selection" placeholder="Site"/>
+                            <field colspan="4" name="sensor_ids" domain="[('sensor_site_ids.site_id', '=', site_id),'|',('group_sensor_ids', '=',False),('group_sensor_ids.group_id', '!=',id)]" widget="many2many_list">
+                                <tree string="Details" editable="bottom">
+                                    <field name="sensor_name"/>
+                                    <field name="mac_address"/>
+                                    <field name="in_status" widget="selection"/>
+                                    <field name="enable_alert"/>
+                                    <field name="inform_limit_count"/>
+                                </tree>
+                            </field>
                         </group>    
                     </sheet>
                     <div class="oe_chatter">

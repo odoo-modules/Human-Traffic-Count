@@ -9,6 +9,7 @@
           <field name="type"/>
           <field name="level"/>
           <field name="message"/>
+          <field name="create_date"/>
         </tree>
       </field>
     </record>

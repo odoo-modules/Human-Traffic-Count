@@ -8,6 +8,7 @@ _logger = logging.getLogger(__name__)
 
 
 class Htc(http.Controller):
+
     @http.route('/htc/getsensor/', auth='public', type='json', csrf=False)
     def list(self, **kw):
         try:
@@ -31,11 +32,12 @@ class Htc(http.Controller):
             http.Response.content_type = 'application/json'
             return None
 
-    @http.route('/htc/transactions/',
-                auth='public',
-                methods=['POST'],
-                type='json',
-                csrf=False)
+    @http.route(
+        '/htc/transactions/',
+        auth='public',
+        methods=['POST'],
+        type='json',
+        csrf=False)
     def object(self, **kw):
         try:
             today = datetime.datetime.today().date()
@@ -81,16 +83,16 @@ class Htc(http.Controller):
                                             daily_counter.alert_count = daily_counter.alert_count + 1
                                             http.request.env[
                                                 'htc.notification_email'].email_notify(
-                                                    record, daily_counter.
-                                                    daily_total_in, 'In',
+                                                    record, daily_counter
+                                                    .daily_total_in, 'In',
                                                     record.inform_limit_count)
                                     else:
                                         if daily_counter.daily_total_out > record.inform_limit_count * daily_counter.alert_count:
                                             daily_counter.alert_count = daily_counter.alert_count + 1
                                             http.request.env[
                                                 'htc.notification_email'].email_notify(
-                                                    record, daily_counter.
-                                                    daily_total_out, 'Out',
+                                                    record, daily_counter
+                                                    .daily_total_out, 'Out',
                                                     record.inform_limit_count)
                     else:
                         daily_counter.transaction_date = day
@@ -105,16 +107,16 @@ class Htc(http.Controller):
                                             daily_counter.alert_count = daily_counter.alert_count + 1
                                             http.request.env[
                                                 'htc.notification_email'].email_notify(
-                                                    record, daily_counter.
-                                                    daily_total_in, 'In',
+                                                    record, daily_counter
+                                                    .daily_total_in, 'In',
                                                     record.inform_limit_count)
                                     else:
                                         if daily_counter.daily_total_out > record.inform_limit_count * daily_counter.alert_count:
                                             daily_counter.alert_count = daily_counter.alert_count + 1
                                             http.request.env[
                                                 'htc.notification_email'].email_notify(
-                                                    record, daily_counter.
-                                                    daily_total_out, 'Out',
+                                                    record, daily_counter
+                                                    .daily_total_out, 'Out',
                                                     record.inform_limit_count)
                 else:
                     notify_count = 1
@@ -136,18 +138,12 @@ class Htc(http.Controller):
                                         #         record, total_out, 'Out',
                                         #         record.inform_limit_count)
                     http.request.env['htc.daily_counter'].create({
-                        'site_id':
-                        site.id,
-                        'sensor_id':
-                        sensor.id,
-                        'transaction_date':
-                        day,
-                        'daily_total_in':
-                        total_in,
-                        'daily_total_out':
-                        total_out,
-                        'alert_count':
-                        notify_count
+                        'site_id': site.id,
+                        'sensor_id': sensor.id,
+                        'transaction_date': day,
+                        'daily_total_in': total_in,
+                        'daily_total_out': total_out,
+                        'alert_count': notify_count
                     })
             if len(valid_ip) > 0:
                 date_string = data[0].get('transaction_date').split('T')[0]
@@ -157,30 +153,18 @@ class Htc(http.Controller):
                 dayNumber = day.weekday()
                 for obj in data:
                     http.request.env['htc.sensor_transaction'].create({
-                        'site_id':
-                        site.id,
-                        'sensor_id':
-                        obj.get('sensor_id'),
-                        'transaction_date':
-                        obj.get('transaction_date'),
-                        'in_count':
-                        obj.get('in_count'),
-                        'out_count':
-                        obj.get('out_count'),
-                        'status':
-                        obj.get('status'),
-                        'process_count':
-                        0,
-                        'week':
-                        week,
-                        'day':
-                        dayNumber,
-                        'method':
-                        obj.get('method'),
-                        'start_time':
-                        obj.get('start_time'),
-                        'end_time':
-                        obj.get('start_time')
+                        'site_id': site.id,
+                        'sensor_id': obj.get('sensor_id'),
+                        'transaction_date': obj.get('transaction_date'),
+                        'in_count': obj.get('in_count'),
+                        'out_count': obj.get('out_count'),
+                        'status': obj.get('status'),
+                        'process_count': 0,
+                        'week': week,
+                        'day': dayNumber,
+                        'method': obj.get('method'),
+                        'start_time': obj.get('start_time'),
+                        'end_time': obj.get('start_time')
                     })
 
                 sensor.ip_address = ip_address
@@ -192,9 +176,8 @@ class Htc(http.Controller):
                 sensor.serial_number = serial_number
                 sensor.sensor_name = sensor_name
             else:
-                _logger.error("Invalid IP Address Range in %s",
-                              file_name,
-                              exc_info=1)
+                _logger.error(
+                    "Invalid IP Address Range in %s", file_name, exc_info=1)
                 http.Response.status = "400"
                 http.Response.content_type = "application/json"
                 return "Application Error"
