@@ -62,6 +62,7 @@ class Site(models.Model):
          "Can't be duplicate value for Prefix and Site Group Code!")
     ]
     server_address = fields.Char("Server Address", requierd=True)
+    server_port = fields.Char("Server Port", requierd=True, default='')
     user_id = fields.Char("User Name", requierd=True)
     password = fields.Char("Password", requierd=True)
     http_port = fields.Char("Http Port")
