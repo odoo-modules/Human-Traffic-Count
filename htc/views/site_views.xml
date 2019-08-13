@@ -14,7 +14,7 @@
                             <field name="site_name"  placeholder="Site Name"/>
                             <field name="site_code" attrs="{'readonly': [('id', '>', 0)]}" placeholder="Site Code"/>
                             <field name="delivery_method"/>
-                            <field name="server_address" placeholder="Web API/SMTP Server Address"/>
+                            <field name="server_address" placeholder="Web API/Server Address Url"/>
                             <field name="user_id"/>
                             <field name="password"/>
                             <field name="http_port"/>
