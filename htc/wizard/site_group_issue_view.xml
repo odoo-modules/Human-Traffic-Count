@@ -1,7 +1,7 @@
 <odoo>
   <data>
     <record model="ir.ui.view" id="view_group_sensor_form">
-      <field name="name">Site Group Sensors</field>
+      <field name="name">Issue Sensors to Site</field>
       <field name="model">htc.site.group.wizard</field>
       <field name="arch" type="xml">
         <form>
@@ -10,15 +10,15 @@
               <group>
                 <field name="site_group_id" invisible="1"/>
                 <field name="site_id"/>
+                <field name='file_name_field_template_id' domain="[('site_group_id', '=', site_group_id)]" />
               </group>
               <group>
               </group>
             </group>
             <field name="sensor_ids">
-              <tree>
+              <tree  domain="[('site_id', '=', False)]">
                 <field name="mac_address"/>
                 <field name="site_id"/>
-                <!-- <field name="site_code"/> -->
                 <field name="status"/>
               </tree>
             </field>
@@ -27,7 +27,7 @@
       </field>
     </record>
    <record id="action_group_sensor_wizard_form" model="ir.actions.act_window">
-     <field name="name">Site Group Sensors</field>
+     <field name="name">Issue Sensors to Site</field>
      <field name="res_model">htc.site.group.wizard</field>
      <field name="view_type">form</field>
      <field name="view_mode">tree,form</field>

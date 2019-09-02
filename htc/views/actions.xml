@@ -2,10 +2,23 @@
 <odoo>
     <data>
         <menuitem name="Human Traffic Count" id="htc_root_menu" web_icon="htc,static/description/icon.png"/>
+        
 
         <record model="ir.actions.act_window" id="action_htc_siteGroup">
             <field name="name">Site Groups</field>
             <field name="res_model">htc.site.group</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_htc_file_field_definition">
+            <field name="name">File Field Definitions</field>
+            <field name="res_model">htc.file_field_definition</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_htc_site_file_format_template">
+            <field name="name">File Name Field Template</field>
+            <field name="res_model">htc.file_name_field_template</field>
             <field name="view_mode">tree,form</field>
         </record>
 
@@ -37,15 +50,24 @@
             <field name="res_model">htc.sensor.sites</field>
             <field name="view_mode">tree,form</field>
         </record>
-
+        
         <menuitem name="Site Groups" id="htc_siteGroup_menu" parent="htc_root_menu"
                   sequence="1"/>
 
         <menuitem name="Site Groups" id="htc_siteGroup_menu_sub" sequence="1"
             parent="htc_siteGroup_menu" action="action_htc_siteGroup"/>
 
+        <menuitem name="File Field Definition" id="htc_file_field_definition_menu_sub" sequence="2"
+            parent="htc_siteGroup_menu" action="action_htc_file_field_definition"/>
+        
+        <menuitem name="File Format Template" id="htc_site_file_format_template_sub" parent="htc_siteGroup_menu" action="action_htc_site_file_format_template"
+                  sequence="3"/>
+        
         <menuitem name="Sites" id="htc_site_menu" parent="htc_root_menu"
-                  sequence="2" action="action_htc_site"/>
+                  sequence="2" action="action_htc_site" />
+
+        <!-- <menuitem name="Sites" id="htc_site_menu_sub" parent="htc_site_menu" action="action_htc_site"
+                  sequence="1"/> -->
 
          <menuitem name="Sensor Sites" id="htc_sensor_site_menu" parent="htc_root_menu"
                   sequence="3" action="action_htc_sensor_site"/>

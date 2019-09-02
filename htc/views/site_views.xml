@@ -1,38 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <data>
-        <record model="ir.ui.view" id="htc_site_form">
-            <field name="name">Site Form View</field>
+        <record id="site_search_view" model="ir.ui.view">
+            <field name="name">htc.site.search</field>
             <field name="model">htc.site</field>
             <field name="arch" type="xml">
-                <form string="site">
-                    <sheet>
-                        <group>
-                            <field name="site_group_id"  widget="selection"
-                                placeholder="Site Group Code" attrs="{'required' : True}"/>
-                            <field name="site_name"  placeholder="Site Name"/>
-                            <field name="site_code" attrs="{'readonly': [('id', '>', 0)]}" placeholder="Site Code"/>
-                            <field name="delivery_method"/>
-                            <field name="server_address" placeholder="Web API/Server Address Url"/>
-                            <field name="server_port" placeholder="Server Port"/>
-                            <field name="user_id"/>
-                            <field name="password"/>
-                            <field name="http_port"/>
-                            <field name="https_port"/>
-                            <field name="timezone_name"/>
-                            <field name="ip_range"/>
-                            <field name="interface_code"/>
-                            <field name="debug_mode_enable"/>
-                            <field name="file_name" widget="many2many_tags" options="{'no_create_edit':'1'}"/>
-                            <field name="site_file_name_format" readonly="1"/>
-                        </group>
-                    </sheet>
-                    <div class="oe_chatter">
-                        <field name="message_follower_ids" widget="mail_followers"
-                               groups="base.group_user"/>
-                        <field name="message_ids" widget="mail_thread" placeholder="Share a message..."/>
-                    </div>
-                </form>
+                <search string="Site Group">
+                    <field name="site_group_id" position="replace">
+                    <field name="site_group_id" string="Site Group Name"/>
+                </field>
+                </search>
             </field>
         </record>
         <record model="ir.ui.view" id="htc_site_tree">
@@ -42,20 +19,149 @@
                <tree>
                     <field name="site_name"/>
                     <field name="site_code"/>
-                    <field name="server_address"/>
+                    <!-- <field name="server_address"/>
                     <field name="user_id"/>
-                    <field name="password"/>
+                    <field name="password"/> -->
                     <field name="ip_range"/>
-                    <field name="delivery_method"/>
-                    <field name="site_file_name_format"/>
+                    <!-- <field name="delivery_method"/> -->
+                    <!-- <field name="site_file_name_format"/> -->
                     <field name="interface_code"/>
-                    <field name="http_port"/>
+                    <!-- <field name="http_port"/>
                     <field name="https_port"/>
-                    <field name="debug_mode_enable"/>
+                    <field name="debug_mode_enable"/> -->
                     <field name="site_group_id"/>
                 </tree>
             </field>
-            
         </record>
+        <record id="action_site_search_form" model="ir.actions.act_window">
+            <field name="name">Site</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">htc.site</field>
+            <field name="view_type">form</field>
+            <field name="search_view_id" ref="site_search_view"/>
+            <field name="view_id" ref="htc_site_tree"/>
+        </record>
+        <record model="ir.ui.view" id="htc_site_form">
+            <field name="name">Site Form View</field>
+            <field name="model">htc.site</field>
+            <field name="arch" type="xml">
+                <form string="site">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="site_group_id"  widget="selection" attrs="{'required' : True}" placeholder="Site Group Name"/>
+                                <field name="site_name"  placeholder="Site Name"/>
+                                <field name="site_code" attrs="{'readonly': [('id', '>', 0)],'requierd': True}" placeholder="Site Code"/>
+                                <field name="file_name_field_template_ids" widget="many2many_tags" requierd="1" domain="[('status', '=', True), ('site_group_id', '=', site_group_id)]" options="{'no_create_edit':'1'}"/>
+                                
+                            </group>
+                            <group>
+                                <!-- <field name="file_name_format_ids"  nolabel="1" readonly="1">
+                                        <tree string="Details">
+                                            <field name="name"/>
+                                            <field name="symbol"/>
+                                        </tree>
+                                </field> -->
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="FTP Data Delivery" name="FTP Data Delivery" >
+                                <group name="FTP Setting">
+                                    <group name="FTP Destination">
+                                        <field name="ftp_enable"/>
+                                        <field name="ftp_server_url" attrs="{'readonly': [('ftp_enable', '!=', True)], 'required' :[('ftp_enable', '=', True)]}"/>
+                                        <field name="ftp_server_port" attrs="{'readonly': [('ftp_enable', '!=', True)], 'required' :[('ftp_enable', '=', True)]}"/>
+                                        <field name="ftp_destination" attrs="{'readonly': [('ftp_enable', '!=', True)], 'required' :[('ftp_enable', '=', True)]}"/>
+                                        <field name="ftp_enable_authentication" attrs="{'readonly': [('ftp_enable', '!=', True)], 'required' :[('ftp_enable', '=', True)]}"/>
+                                        <field name="ftp_user_name" attrs="{'readonly': [('ftp_enable_authentication', '!=', True)], 'required' :[('ftp_enable_authentication', '=', True)]}"/>
+                                        <field name="ftp_password" attrs="{'readonly': [('ftp_enable_authentication', '!=', True)], 'required' :[('ftp_enable_authentication', '=', True)]}"/>
+                                        <field name="ftp_ftps" attrs="{'readonly': [('ftp_enable', '!=', True)], 'required' :[('ftp_enable', '=', True)]}"/>
+                                        <field name="ftp_sni_host_name" attrs="{'readonly': [('ftp_ftps', '!=', True)], 'required' :[('ftp_ftps', '=', True)]}"/>
+                                        <field name="ftp_enable_external_ip" attrs="{'readonly': [('ftp_enable', '!=', True)], 'required' :[('ftp_enable', '=', True)]}"/>
+                                        <field name="ftp_exteranl_ip" attrs="{'readonly': [('ftp_enable_external_ip', '!=', True)], 'required' :[('ftp_enable_external_ip', '=', True)]}"/>
+                                    </group>
+                                    <group name="FTP Delivery Settings">
+                                        <field name="ftp_aggretation_level" attrs="{'readonly': [('ftp_enable', '!=', True)], 'required' :[('ftp_enable', '=', True)]}"/>
+                                        <field name="ftp_current_aggretation_level" attrs="{'readonly': 1}"/>
+                                        <field name="ftp_delivery_format" attrs="{'readonly': [('ftp_enable', '!=', True)], 'required' :[('ftp_enable', '=', True)]}"/>
+                                        <field name="ftp_delivery_schdule" attrs="{'readonly': [('ftp_enable', '!=', True)], 'required' :[('ftp_enable', '=', True)]}"/>
+                                        <field name="ftp_current_delivery_schdule" attrs="{'readonly': 1}"/>
+                                        <field name="ftp_max_attempts" attrs="{'readonly': [('ftp_enable', '!=', True)], 'required' :[('ftp_enable', '=', True)]}"/>
+                                        <field name="ftp_retry_level" attrs="{'readonly': [('ftp_enable', '!=', True)], 'required' :[('ftp_enable', '=', True)]}"/>
+                                        <field name="ftp_enable_port_range" attrs="{'readonly': [('ftp_enable', '!=', True)], 'required' :[('ftp_enable', '=', True)]}"/>
+                                        <field name="ftp_lowest_port" attrs="{'readonly': [('ftp_enable_port_range', '!=', True)], 'required' :[('ftp_enable_port_range', '=', True)]}"/>
+                                        <field name="ftp_highest_port" attrs="{'readonly': [('ftp_enable_port_range', '!=', True)], 'required' :[('ftp_enable_port_range', '=', True)]}"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Email Delivery" >
+                                <group name="Email Setting">
+                                    <group>
+                                        <field name="email_enable"/>
+                                        <field name="email_server_url" attrs="{'readonly': [('email_enable', '!=', True)], 'required' :[('email_enable', '=', True)]}"/>
+                                        <field name="email_server_port" attrs="{'readonly': [('email_enable', '!=', True)], 'required' :[('email_enable', '=', True)]}"/>
+                                        <field name="email_sender_email_address" attrs="{'readonly': [('email_enable', '!=', True)], 'required' :[('email_enable', '=', True)]}"/>
+                                        <field name="email_recipient_email_address" attrs="{'readonly': [('email_enable', '!=', True)], 'required' :[('email_enable', '=', True)]}"/>
+                                    </group>
+                                    <group>
+                                        <div class="o_row"></div>
+                                        <field name="email_aggretation_level" attrs="{'readonly': [('email_enable', '!=', True)], 'required' :[('email_enable', '=', True)]}"/>
+                                        <field name="email_delivery_time" attrs="{'readonly': [('email_enable', '!=', True)], 'required' :[('email_enable', '=', True)]}"/>
+                                        <field name="email_enable_authentication" attrs="{'readonly': [('email_enable', '!=', True)], 'required' :[('email_enable', '=', True)]}"/>
+                                        <field name="email_user_name" attrs="{'readonly': [('email_enable_authentication', '!=', True)], 'required' :[('email_enable_authentication', '=', True)]}"/>
+                                        <field name="email_password" attrs="{'readonly': [('email_enable_authentication', '!=', True)], 'required' :[('email_enable_authentication', '=', True)]}"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Batch Delivery" >
+                                <group name="Batch Setting">
+                                    <group name="Batch 1">
+                                        <field name="batch1_enable"/>
+                                        <field name="batch1_server_url" attrs="{'readonly': [('batch1_enable', '!=', True)], 'required' :[('batch1_enable', '=', True)]}"/>
+                                        <field name="batch1_server_port" attrs="{'readonly': [('batch1_enable', '!=', True)], 'required' :[('batch1_enable', '=', True)]}"/>
+                                        <field name="batch1_destination" attrs="{'readonly': [('batch1_enable', '!=', True)], 'required' :[('batch1_enable', '=', True)]}"/>
+                                        <field name="batch1_aggretation_level" attrs="{'readonly': [('batch1_enable', '!=', True)], 'required' :[('batch1_enable', '=', True)]}"/>
+                                        <field name="batch1_delivery_schdule" attrs="{'readonly': [('batch1_enable', '!=', True)], 'required' :[('batch1_enable', '=', True)]}"/>
+                                        <field name="batch1_enable_encryption" attrs="{'readonly': [('batch1_enable', '!=', True)], 'required' :[('batch1_enable', '=', True)]}"/>
+                                        <field name="batch1_sni_host_name" attrs="{'readonly': [('batch1_enable_encryption', '!=', True)], 'required' :[('batch1_enable_encryption', '=', True)]}"/>
+                                    </group>
+                                    <group name="Batch 2">
+                                        <field name="batch2_enable"/>
+                                        <field name="batch2_server_url" attrs="{'readonly': [('batch2_enable', '!=', True)], 'required' :[('batch2_enable', '=', True)]}"/>
+                                        <field name="batch2_server_port" attrs="{'readonly': [('batch2_enable', '!=', True)], 'required' :[('batch2_enable', '=', True)]}"/>
+                                        <field name="batch2_destination" attrs="{'readonly': [('batch2_enable', '!=', True)], 'required' :[('batch2_enable', '=', True)]}"/>
+                                        <field name="batch2_aggretation_level" attrs="{'readonly': [('batch2_enable', '!=', True)], 'required' :[('batch2_enable', '=', True)]}"/>
+                                        <field name="batch2_delivery_schdule" attrs="{'readonly': [('batch2_enable', '!=', True)], 'required' :[('batch2_enable', '=', True)]}"/>
+                                        <field name="batch2_enable_encryption" attrs="{'readonly': [('batch2_enable', '!=', True)], 'required' :[('batch2_enable', '=', True)]}"/>
+                                        <field name="batch2_sni_host_name" attrs="{'readonly': [('batch2_enable_encryption', '!=', True)], 'required' :[('batch2_enable_encryption', '=', True)]}"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Real Time Delivery" >
+                                <group name="Batch Setting">
+                                    <group name="Batch 1">
+                                        <field name="real_time_enable"/>
+                                        <field name="real_time_server_url" attrs="{'readonly': [('real_time_enable', '!=', True)], 'required' :[('real_time_enable', '=', True)]}"/>
+                                        <field name="real_time_server_port" attrs="{'readonly': [('real_time_enable', '!=', True)], 'required' :[('real_time_enable', '=', True)]}"/>
+                                        <field name="real_time_destination" attrs="{'readonly': [('real_time_enable', '!=', True)], 'required' :[('real_time_enable', '=', True)]}"/>
+                                        <field name="real_time_delivery_protocol" attrs="{'readonly': [('real_time_enable', '!=', True)], 'required' :[('real_time_enable', '=', True)]}"/>
+                                        <field name="real_time_delivery_frequency" attrs="{'readonly': [('real_time_enable', '!=', True)], 'required' :[('real_time_enable', '=', True)]}"/>
+                                        <field name="real_time_skip_inactivity" attrs="{'readonly': [('real_time_enable', '!=', True)]}"/>
+                                    </group>
+                                    <group>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"
+                               groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread" placeholder="Share a message..."/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        
     </data>
 </odoo>

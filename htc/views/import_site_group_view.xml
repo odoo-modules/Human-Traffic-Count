@@ -2,15 +2,27 @@
 <odoo>
     <data>
         <record model="ir.ui.view" id="htc_sensor_site_import_form">
-            <field name="name">Import Site Group</field>
+            <field name="name">Import Sensors to Site Group</field>
             <field name="model">import.site_group</field>
             <field name="arch" type="xml">
                 <form string="Import Sensors">
                     <sheet>
+                        <div class="oe_button_box" name="button_box">
+                        <button name="import_data" type="object" icon="fa-upload" class="oe_stat_button">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Import</span>
+                            </div>
+                        </button>
+                            <button name="get_import_template" type="object" icon="fa-download" class="oe_stat_button" >
+                                    <div class="o_field_widget o_stat_info">
+                                            <span class="o_stat_text">Download</span>
+                                    </div>
+                            </button>
+                        </div>
                         <group>
+                            <field name="enable_debug_log"/>
                             <field name="import_file" filename="import_fname" />
                             <field name="import_fname" invisible="1" class="oe_inline oe_right" />
-                            <!-- <field name="site_group_id"/> -->
                         </group>
                     </sheet>
                     <div class="oe_chatter">
@@ -19,16 +31,16 @@
                         <field name="message_ids" widget="mail_thread" placeholder="Share a message..."/>
                     </div>
                     <footer>
-                        <button name="import_data" string="Import" type="object"
+                        <!-- <button name="import_data" string="Import" type="object"
                             class="oe_highlight" />
-                        or
-                        <button string="Cancel" class="oe_link" special="cancel" />
+                                                or
+                        <button string="Cancel" class="oe_link" special="cancel" /> -->
                     </footer>
                 </form>
             </field>
         </record>
         <record model="ir.ui.view" id="htc_sensor_site_import_tree">
-            <field name="name">Import Site Group</field>
+            <field name="name">Import Sensors to Site Group</field>
             <field name="model">import.site_group</field>
             <field name="arch" type="xml">
                <tree>
@@ -39,7 +51,7 @@
             </field>
         </record>
         <record model="ir.actions.act_window" id="action_site_group_import">
-            <field name="name">Import Site Group</field>
+            <field name="name">Import Sensors to Site Group</field>
             <field name="res_model">import.site_group</field>
             <field name="view_mode">tree,form</field>
             <field name="view_id" ref="htc.htc_sensor_site_import_form"/> 

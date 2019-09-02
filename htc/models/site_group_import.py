@@ -5,6 +5,8 @@ import base64
 import xlrd
 from xlrd import open_workbook
 from odoo.exceptions import UserError, ValidationError
+import os
+import csv
 
 header_fields = ['Mac Address', 'XML Format']
 
@@ -16,72 +18,15 @@ class ImportSiteGroup(models.Model):
     _inherit = 'mail.thread'
 
     import_fname = fields.Char('Filename', size=128)
-    import_file = fields.Binary('File', required=True)
+    # import_file = fields.Binary('File', required=True)
+    import_file = fields.Binary('File')
 
     err_log = ''
+    enable_debug_log = fields.Boolean('Debug Log Enable', default=True)
 
-    def _check_file_ext(self):
-        for import_file in self:
-            if '.dat' or '.DAT' or '.xls' or '.xlsx' in import_file.import_fname:
-                return True
-            else:
-                return False
-        return True
-
-    _constraints = [(_check_file_ext, "Please import EXCEL file!",
-                     ['import_fname'])]
-
-    # ## Load excel data file
-    def get_excel_datas(self, sheets):
-        result = []
-        for s in sheets:
-            cell_row = 0
-            for row in range(cell_row, s.nrows):
-                values = []
-                for col in range(0, s.ncols):
-                    values.append(s.cell(row, col).value)
-                result.append(values)
-        return result
-
-    # ## Check excel row headers with header_fields and define header indexes for database fields
-    def get_headers(self, line):
-        print("line=>", line[0].strip())
-        if line[0].strip() not in header_fields:
-
-            raise ValidationError(
-                _('Error :'),
-                _("Error while processing the header line %s.\\n\nPlease check your Excel separator as well as the column header fields"
-                  ) % line)
-        else:
-            # ## set header_fields to header_index with value -1
-            for header in header_fields:
-                header_indexes[header] = -1
-
-            col_count = 0
-            for ind in range(len(line)):
-                if line[ind] == '':
-                    col_count = ind
-                    break
-                elif ind == len(line) - 1:
-                    col_count = ind + 1
-                    break
-
-            for i in range(col_count):
-                header = line[i].strip().lower()
-                if header not in header_fields:
-                    self.err_log += '\n' + _(
-                        "Invalid Excel File, Header Field '%s' is not supported !"
-                    ) % header
-                else:
-                    header_indexes[header] = i
-
-            for header in header_fields:
-                if header_indexes[header] < 0:
-                    self.err_log += '\n' + _(
-                        "Invalid Excel file, Header '%s' is missing !") % header
-
-    ######### Read data and import to database ##########
+    # Read data and import to database ##########
     def import_data(self):
+        file_data = []
         val = {}
         header_line = True
         active_id = active = None
@@ -98,88 +43,180 @@ class ImportSiteGroup(models.Model):
                                                 val['site_group_code'])])
         if not site_group_id:
             site_group_id = site_group_obj.create(val).id
-        print("site_groupw1=>", site_group_id)
         import_file = self.import_file
         file_name = self.import_fname
-        print("file name", file_name)
         r = []
-        if file_name.find('.xls') != -1 or file_name.find('.xlsx') != -1:
-            lines = base64.decodestring(import_file)
-            print("lines", lines)
-            wb = open_workbook(file_contents=lines)
-            r = self.get_excel_datas(wb.sheets())
-        all_data = []
-        created_counnt = 0
-        updated_count = 0
-        skipped_count = 0
-        skip_data = []
-        for ln in r:
-            if not ln or ln and ln[0] and ln[0][0] in ['', '#']:
-                continue
-            if header_line:
-                self.get_headers(ln)
-                header_line = False
-            else:
-                if ln and ln[0] and ln[0][0] not in ['#', '']:
-                    import_vals = {}
-                    import_vals['Mac Address'] = ln[0]
-                    import_vals['XML Format'] = ln[1]
-                    all_data.append(import_vals)
-                    print("DATA", all_data)
-            if all_data:
+        if file_name and file_name.find('.csv') != -1:
+            date_time_obj = datetime.strptime(
+                file_name.split('_')[0], '%d%m%y%H%M%S')
+            if date_time_obj and file_name.split('_')[1] == 'sensor' and file_name.split('_')[2] == 'import.csv':
+                lines = base64.decodestring(import_file).decode('utf-8').split(
+                    '\r\n')
+                if len(lines) <= 4:
+                    raise ValidationError(_("Invalid File Content"))
+                    return True
+                count = 0
+                for line in lines:
+                    count += 1
+                    if line != "" and count < 4:
+                        if line.find(':') == -1:
+                            raise ValidationError(_("Invalid File Content"))
+                            return True
+                        cols = line.split(":")
+                        file_data.append(cols)
+                    if line != "" and count >= 4:
+                        if line.find(',') == -1:
+                            raise ValidationError(_("Invalid File Content"))
+                            return True
+                        cols = line.split(",")
+                        file_data.append(cols)
+
                 sen_val = {}
                 sensor_ids = None
                 sensors_with_group = []
                 site_group = []
                 sensors = []
-                for data in all_data:
-                    active = False
-                    sensors_with_group = []
-                    site_group = []
-                    sensors = []
-                    print('------------')
-                    excel_row = all_data.index(data) + 2
-                    print('excel row => ' + str(excel_row))
-                    print('data ' + str(data))
-                    print(data)
-                    mac_address = data['Mac Address']
-                    xml_format = data['XML Format']
-                    if mac_address and xml_format:
-                        sensor_ids = sensor_obj.search([
-                            ('mac_address', 'ilike', mac_address),
-                            ('site_group_id', '=', site_group_id.id)
-                        ])
-                        sensors_with_group.append(sensor_ids.mac_address)
-                        site_group.append(
-                            sensor_ids.site_group_id.site_group_name)
-                        if sensor_ids.status == True:
-                            active = True
-                    sensor_id = sensor_obj.search([('mac_address', 'ilike',
-                                                    mac_address)])
+                count = 0
+                already_sensor_count = 0
+                for data in file_data[4:]:
+                    sensor_id = sensor_obj.search(
+                        [('mac_address', 'ilike', data[0])], limit=1)
                     if sensor_id:
-                        for s in sensor_id:
-                            sensors = []
-                            print("s", s)
-                            sensors.append(s.mac_address)
-                            print("mac address", s.mac_address)
-                if active == True:
-                    raise ValidationError(
-                        _("Please 'Inactive' the sensors of Mac Address %s  in %s Site Group."
-                          ) % (sensors_with_group[0], site_group[0]))
-                elif sensors_with_group != [False]:
-                    raise ValidationError(
-                        _("Please already exit the sensors of Mac Address %s in %s Site Group."
-                          ) % (sensors_with_group[0], site_group[0]))
-                else:
-                    print("sens", sensors, sensors_with_group)
-                    if sensors != []:
-                        raise ValidationError(
-                            _("Importing Sensor already exit check the sensors of Mac Address %s ."
-                              ) % sensors[0])
+                        self.env['ir.logging'].create({
+                            'create_uid':
+                                self.env.uid,
+                            'create_date':
+                                datetime.today(),
+                            'name':
+                                "import data",
+                            'type':
+                                "client",
+                            'dbname':
+                                self.env.cr.dbname,
+                            'path':
+                                "",
+                            'func':
+                                "import sensor",
+                            'line':
+                                "",
+                            'level':
+                                "ERROR",
+                            'message':
+                                'Already sersor import with Mac-Address - {1} with file name {0}'
+                                .format(sensor_id[0].ref_file_name, data[0])
+                        })
+                        already_sensor_count += 1
+                        continue
                     else:
                         sen_val = {
-                            'mac_address': mac_address,
-                            'xml_format': xml_format,
+                            'mac_address': data[0],
+                            'brand_name': data[1],
+                            'serial_number': data[2],
+                            'license_code': data[3],
                             'site_group_id': site_group_id.id,
+                            'xml_format': 'Latest',
+                            'import_date': datetime.now().date(),
+                            'ref_file_name': file_name,
+                            'status': True,
+                            'company_code': file_data[0][1],
+                            'invoice_no': file_data[1][1],
+                            'invoice_date': file_data[2][1],
                         }
-                        sensor_obj.create(sen_val)
+                    sensor_obj.create(sen_val)
+                    if self.enable_debug_log:
+                        self.env['ir.logging'].create({
+                            'create_uid':
+                                self.env.uid,
+                            'create_date':
+                                datetime.today(),
+                            'name':
+                                "import data",
+                            'type':
+                                "client",
+                            'dbname':
+                                self.env.cr.dbname,
+                            'path':
+                                "",
+                            'func':
+                                "import sensor",
+                            'line':
+                                "",
+                            'level':
+                                "Info",
+                            'message':
+                                'sersor successful imported with Mac-Address - {1} with file name {0}'
+                                .format(sen_val.get('ref_file_name'), sen_val.get('mac_address'))
+                        })
+
+                if self.enable_debug_log is False:
+                    self.env['ir.logging'].create({
+                        'create_uid':
+                            self.env.uid,
+                        'create_date':
+                            datetime.today(),
+                        'name':
+                            "import data",
+                        'type':
+                            "client",
+                        'dbname':
+                            self.env.cr.dbname,
+                        'path':
+                            "",
+                        'func':
+                            "import sensor",
+                        'line':
+                            "",
+                        'level':
+                            "Info",
+                        'message':
+                            'Total Sensor Count - {2} and imported sensor count {1} and file name {0}'
+                            .format(
+                                str(len(file_data[4:])),
+                                str(len(file_data[4:]) - already_sensor_count),
+                                file_name)
+                    })
+            else:
+                self.env['ir.logging'].create({
+                    'create_uid': self.env.uid,
+                    'create_date': datetime.today(),
+                    'name': "import data",
+                    'type': "client",
+                    'dbname': self.env.cr.dbname,
+                    'path': "",
+                    'func': "import sensor",
+                    'line': "",
+                    'level': "Error",
+                    'message': 'Invalid file Name format'
+                })
+        else:
+            self.env['ir.logging'].create({
+                'create_uid': self.env.uid,
+                'create_date': datetime.today(),
+                'name': "import data",
+                'type': "client",
+                'dbname': self.env.cr.dbname,
+                'path': "",
+                'func': "import sensor",
+                'line': "",
+                'level': "Error",
+                'message': 'File is required to upload'
+            })
+            raise ValidationError(_("Please choose file to import."))
+            return True
+
+    @api.one
+    def _get_template(self):
+        directory_path = os.getcwd()
+        file_path = directory_path + '\\static\\csv\\sensor_import.csv'
+        self.import_template = base64.b64encode(open(file_path, "rb").read())
+
+    import_template = fields.Binary(
+        'Template', compute="_get_template", store=False)
+
+    @api.multi
+    def get_import_template(self):
+        file_name = datetime.now().strftime(
+            '%d%m%y%H%M%S') + '_sensor_import.csv'
+        url = f'/web/content/import.site_group/{self.id}/import_template/{file_name}?download=true'
+
+        return {'type': 'ir.actions.act_url', 'name': 'contract', 'url': url}

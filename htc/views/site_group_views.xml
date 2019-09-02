@@ -7,10 +7,30 @@
             <field name="arch" type="xml">
               <form string="sitegroup">
                  <header>
-                      <button string="Sensor Import" name="%(htc.action_site_group_import)d" type="action" class="btn-primary" context="{'current_id': active_id}"/>
-                      <button string="Generate Issue" name="%(action_group_sensor_wizard_form)d" type="action" class="btn-primary" context="{'active_ids': active_id}"/>
+                      <button string="Sensor Import" name="%(htc.action_site_group_import)d" type="action"  context="{'current_id': active_id}"/>
+                      <button string="Generate Issue" name="%(action_group_sensor_wizard_form)d" type="action"  context="{'active_ids': active_id}"/>
                   </header>
                   <sheet>
+                      <div class="oe_button_box" name="button_box">
+                        <button name="%(htc.action_site_group_file_name_field_template_search_form)d" type="action" icon="fa-sitemap" class="oe_stat_button" context="{'search_default_site_group_id': id}">
+                              <div class="o_field_widget o_stat_info">
+                                      <span class="o_stat_value"><field name="file_name_field_temp_count"/></span>
+                                      <span class="o_stat_text">File Name Field Template</span>
+                              </div>
+                          </button>
+                          <button name="%(htc.action_sensor_search_form)d" type="action" icon="fa-sitemap" class="oe_stat_button" context="{'search_default_site_group_id': id}">
+                              <div class="o_field_widget o_stat_info">
+                                      <span class="o_stat_value"><field name="sensor_count"/></span>
+                                      <span class="o_stat_text">Sensors</span>
+                              </div>
+                          </button>
+                          <button class="oe_stat_button" name="%(htc.action_site_search_form)d"  icon="fa-tags" type="action" context="{'search_default_site_group_id': id}">
+                              <div class="o_field_widget o_stat_info">
+                                      <span class="o_stat_value"><field name="site_count"/></span>
+                                      <span class="o_stat_text">Sites</span>
+                              </div>
+                          </button>
+                      </div>
                       <group>
                           <field name="site_group_name"  placeholder="Site Group Name"/>
                           <field name="site_group_code"  attrs="{'readonly': [('id', '>', 0)]}" placeholder="Site Group Code"/>
@@ -25,23 +45,12 @@
                               <field name="xml_format" readonly="1"/>
                               <field name="site_id" readonly="1"/>
                               <field name="status" readonly="1"/>
-                              <!--<field name="site_code" readonly="1"/>-->
                             </tree>
                           </field>
                         </page>
                     </notebook>
                   </sheet>
                 </form>
-            </field>
-          </record>
-         <record model="ir.ui.view" id="htc_sitegroup_tree">
-            <field name="name">Site Group Tree View</field>
-            <field name="model">htc.site.group</field>
-            <field name="arch" type="xml">
-               <tree>
-                    <field name="site_group_name" />
-                    <field name="site_group_code" />
-                </tree>
             </field>
         </record>
     </data>

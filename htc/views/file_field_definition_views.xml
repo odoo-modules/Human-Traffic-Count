@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="htc_site_group_file_field_definition_form">
+            <field name="name">File Field Definition Form View</field>
+            <field name="model">htc.file_field_definition</field>
+            <field name="arch" type="xml">
+                <form string="group">
+                    <sheet>
+                        <group>
+                            <field name="code_description"  placeholder="Code Description"/>
+                            <field name="code" placeholder="Code"/>
+                            <field name="map_to" placeholder="Map To"/>
+                        </group>    
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"
+                               groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread" placeholder="Share a message..."/>
+                    </div>
+                </form>
+            </field>
+        </record>
+         <record model="ir.ui.view" id="htc_site_group_file_field_definition_tree">
+            <field name="name">Site File Format Tree View</field>
+            <field name="model">htc.file_field_definition</field>
+            <field name="arch" type="xml">
+                <tree> 
+                    <field name="code_description"/>
+                    <field name="code"/>
+                    <field name="map_to"/>
+               </tree>
+            </field>
+        </record>
+    </data>
+</odoo>

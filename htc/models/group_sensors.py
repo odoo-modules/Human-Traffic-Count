@@ -10,7 +10,10 @@ class GroupSensors(models.Model):
     _inherit = 'mail.thread'
 
     group_id = fields.Many2one("htc.group", string="Group", requierd=True)
-    sensor_id = fields.Many2one("htc.sensor", string="Sensor", requierd=True)
+    sensor_id = fields.Many2one(
+        "htc.sensor",
+        string="Sensor",
+        requierd=True)
     in_status = fields.Selection([
         (5, 'Sensor In'),
         (10, 'Sensor Out'),
@@ -25,11 +28,21 @@ class GroupSensors(models.Model):
         required=True,
         default=datetime.datetime(1990, 1, 1).date())
     inform_limit_count = fields.Integer("Limit to Inform", default=0)
-    _sql_constraints = [('group_sensors_unique', 'unique(group_id,sensor_id)',
-                         "Can't be duplicate value for  Group and Sensor!")]
+    active = fields.Boolean(string=u'Active', default='true')
+
+    start_date = fields.Date(
+        string=u'Start Date',
+        default=datetime.datetime.today().date(),
+    )
+    end_date = fields.Date(
+        string=u'End Date',
+        default=None,
+    )
+
+    sensor_name = fields.Char(string=u'Sensor Name', required=True)
 
     @api.onchange('in_status')
-    def do_stuff(self):
+    def change_out_status(self):
         if self.in_status:
             if self.in_status == 10:
                 self.out_status = 5
@@ -39,6 +52,20 @@ class GroupSensors(models.Model):
         else:
             self.in_status = 5
             self.out_status = 10
+
+    @api.onchange('active')
+    def change_end_date(self):
+        if self.active is False:
+            self.end_date = datetime.datetime.today().date()
+        else:
+            self.end_date = None
+
+    @api.onchange('sensor_id')
+    def change_sensor_name(self):
+        if self.sensor_id:
+            self.sensor_name = self.sensor_id.device_name
+        else:
+            self.sensor_name = None
 
     @api.multi
     def name_get(self):

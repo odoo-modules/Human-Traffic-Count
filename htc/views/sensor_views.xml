@@ -1,27 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <data>
+        <record id="sensor_search_view" model="ir.ui.view">
+            <field name="name">htc.site.search</field>
+            <field name="model">htc.site</field>
+            <field name="arch" type="xml">
+                <search string="Site Group">
+                    <field name="site_group_id" position="replace">
+                    <field name="site_group_id" string="Site Group Name"/>
+                </field>
+                </search>
+            </field>
+        </record>
         <record model="ir.ui.view" id="htc_sensor_form">
             <field name="name">Sensor Form View</field>
             <field name="model">htc.sensor</field>
             <field name="arch" type="xml">
-                <form string="Sensor">
+                <form string="Sensor" create="false" delete="false" edit="false">
                     <sheet>
+                        <div class="oe_button_box" name="button_box">
+                        <button name="%(htc.action_site_group_search_form)d" type="action" icon="fa-sitemap" class="oe_stat_button" 
+                            context="{'search_default_id': site_group_id}">
+                              <div class="o_field_widget o_stat_info">
+                                      <span class="o_stat_text">Site Group</span>
+                              </div>
+                            </button>
+                            <button name="toggle_status" type="object"
+                                    class="oe_stat_button" icon="fa-check">
+                                <field name="status" widget="boolean_button"
+                                    options="{'terminology':{
+                                            'string_true': 'Active',
+                                            'hover_true': 'Active',
+                                            'string_false': 'In Active',
+                                            'hover_false': 'In Active'
+                                        }}"/>
+                            </button>
+                        </div>
                         <group>
-                            <field name="site_group_id"  placeholder="Site Group"/>
-                            <field name="mac_address"  placeholder="Mac Address"/>
-                            <field name="xml_format"  widget="selection" placeholder="Xml Format"/>
-                            <field name="device_name"  placeholder="Device Name"/>
-                            <field name="division_id"  placeholder="Division Id"/>
-                            <field name="sensor_id"  placeholder="Sensor Id"/>
-                            <field name="sensor_name"  placeholder="Sensor Name"/>
-                            <field name="hardware_release_version"  placeholder="Hardware Release Version"/>
-                            <field name="serial_number"  placeholder="Serial Number"/>
-                            <field name="software_release"  placeholder="Software Version"/>
-                            <field name="host_name"  placeholder="Host Name"/>
-                            <field name="ip_address"  placeholder="IP Address"/>
-                            <field name="site_id"/>
+                            <field name="site_group_id" attrs="{'readonly': 1}" placeholder="Site Group"/>
+                            <field name="mac_address" attrs="{'readonly': 1}" placeholder="Mac Address"/>
+                            <field name="xml_format" attrs="{'readonly': 1}" widget="selection" placeholder="Xml Format"/>
+                            <field name="device_name" attrs="{'readonly': 1}" placeholder="Device Name"/>
+                            <field name="division_id" attrs="{'readonly': 1}" placeholder="Division Id"/>
+                            <field name="sensor_id" attrs="{'readonly': 1}" placeholder="Sensor Id"/>
+                            <field name="sensor_name" attrs="{'readonly': 1}" placeholder="Sensor Name"/>
+                            <field name="hardware_release_version" attrs="{'readonly': 1}" placeholder="Hardware Release Version"/>
+                            <field name="serial_number" attrs="{'readonly': 1}" placeholder="Serial Number"/>
+                            <field name="software_release" attrs="{'readonly': 1}" placeholder="Software Version"/>
+                            <field name="host_name" attrs="{'readonly': 1}" placeholder="Host Name"/>
+                            <field name="ip_address" attrs="{'readonly': 1}" placeholder="IP Address"/>
+                            <field name="site_id" attrs="{'readonly': 1}"/>
+                            <field name="brand_name" attrs="{'readonly': 1}"/>
+                            <field name="license_code" attrs="{'readonly': 1}"/>
+                            <field name="template_file_name" attrs="{'readonly': 1}"/>
                         </group>
+                        <footer>
+                      
+                        </footer>
                     </sheet>
                     <div class="oe_chatter">
                         <field name="message_follower_ids" widget="mail_followers"
@@ -36,15 +71,26 @@
             <field name="model">htc.sensor</field>
             <field name="priority">4</field>
             <field name="arch" type="xml">
-                <tree>
+                <tree create="false" edit="false" delete="false">
                     <field name="site_group_id"  />
                     <field name="mac_address" />
                     <field name="device_name"/>
                     <field name="xml_format"/>
                     <field name="site_id"/>
-                    <!-- <field name="site_code"/> -->
+                    <field name="license_code"/>
+                    <field name="brand_name"/>
+                    <field name="template_file_name"/>
+                    <field name="status"/>
                 </tree>
             </field>
+        </record>
+         <record id="action_sensor_search_form" model="ir.actions.act_window">
+            <field name="name">Sensors</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">htc.sensor</field>
+            <field name="view_type">form</field>
+            <field name="search_view_id" ref="sensor_search_view"/>
+            <field name="view_id" ref="view_sensor_tree"/>
         </record>
     </data>
 

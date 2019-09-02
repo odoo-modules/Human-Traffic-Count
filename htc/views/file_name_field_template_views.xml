@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="site_group_file_name_field_search_view" model="ir.ui.view">
+            <field name="name">Site Group File Name Field Search View</field>
+            <field name="model">htc.file_name_field_template</field>
+            <field name="arch" type="xml">
+                <search string="Site Group">
+                <field name="site_group_id" position="replace">
+                    <field name="site_group_id" string="Site Group"/>
+                </field>
+                </search>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="htc_file_name_field_template_form">
+            <field name="name">File Name Field Template Form View</field>
+            <field name="model">htc.file_name_field_template</field>
+            <field name="arch" type="xml">
+                <form string="group">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="%(htc.action_site_group_search_form)d" type="action" icon="fa-sitemap" class="oe_stat_button" 
+                            context="{'search_default_id': site_group_id}">
+                              <div class="o_field_widget o_stat_info">
+                                      <span class="o_stat_text">Site Group</span>
+                              </div>
+                            </button>
+                            <button name="toggle_status" type="object"
+                                    class="oe_stat_button" icon="fa-check">
+                                <field name="status" widget="boolean_button"
+                                    options="{'terminology':{
+                                            'string_true': 'Active',
+                                            'hover_true': 'Active',
+                                            'string_false': 'In Active',
+                                            'hover_false': 'In Active'
+                                        }}"/>
+                            </button>
+                        </div>
+                        <group>
+                            <field name="site_group_id" widget="selection" placeholder="Site Group"/>
+                            <field name="template_name"  placeholder="Template Name"/>
+                            <field name="template_code" readonly="1" placeholder="Template Code"/>
+                            <field name="file_name_separator" placeholder="File Name Separator" attrs="{'required' : True}" />
+                            <field name="file_fields_definition_ids" widget="many2many_tags" options="{'no_create_edit':'1'}"/>
+                            <field name="remark"  placeholder="Remark"  readonly="1" />
+                            <field name="symbol_file_format"  placeholder=""  readonly="1" />
+                        </group>    
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"
+                               groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread" placeholder="Share a message..."/>
+                    </div>
+                </form>
+            </field>
+        </record>
+         <record model="ir.ui.view" id="htc_file_name_field_template_tree">
+            <field name="name">File Name Field Template Tree View</field>
+            <field name="model">htc.file_name_field_template</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="site_group_id"/>
+                    <field name="template_name"/>
+                    <field name="template_code"/>
+                    <field name="file_name_separator"/>
+                    <field name="status"/>
+                    <field name="remark"/>
+               </tree>
+            </field>
+        </record>
+        <record id="action_site_group_file_name_field_template_search_form" model="ir.actions.act_window">
+            <field name="name">Site Group File Name Field Template</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">htc.file_name_field_template</field>
+            <field name="view_type">form</field>
+            <field name="search_view_id" ref="site_group_file_name_field_search_view"/>
+            <field name="view_id" ref="htc_file_name_field_template_tree"/>
+        </record>
+    </data>
+</odoo>

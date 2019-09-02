@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="htc_sitegroup_tree">
+            <field name="name">Site Group Tree View</field>
+            <field name="model">htc.site.group</field>
+            <field name="arch" type="xml">
+               <tree>
+                    <field name="site_group_name" />
+                    <field name="site_group_code" />
+                    <field name="license_code" />
+                </tree>
+            </field>
+        </record>
+        <record id="site_group_search_view" model="ir.ui.view">
+            <field name="name">Site Group Search View</field>
+            <field name="model">htc.site.group</field>
+            <field name="arch" type="xml">
+                <search string="Site Group">
+                    <field name="id" />
+                </search>
+            </field>
+        </record>
+        <record id="action_site_group_search_form" model="ir.actions.act_window">
+            <field name="name">Site Group</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">htc.site.group</field>
+            <field name="view_type">form</field>
+            <field name="search_view_id" ref="site_group_search_view"/>
+            <field name="view_id" ref="htc_sitegroup_tree"/>
+        </record>
+    </data>
+</odoo>
