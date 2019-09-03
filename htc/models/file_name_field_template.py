@@ -54,8 +54,7 @@ class FileNameFieldTemplate(models.Model):
             result.append((record.id, name))
         return result
 
-    @api.model
-    @api.depends('site_group_id')
+    @api.onchange('site_group_id')
     def _get_template_code(self):
         list = []
         if self.site_group_id and self.template_code is False:
@@ -74,7 +73,6 @@ class FileNameFieldTemplate(models.Model):
 
     @api.multi
     def browse_site_group(self):
-        aa = 'b'
         compose_form = self.env.ref('htc.action_site_group_search_form', False)
         compose_form.context = {'search_default_id': self.site_group_id.id}
         return {
@@ -93,3 +91,28 @@ class FileNameFieldTemplate(models.Model):
     @api.multi
     def get_site_group_name(self):
         return self.site_group_id.site_group_name
+
+    @api.model
+    def create(self, values):
+        list = []
+        template_code = ''
+        if values.get('site_group_id'):
+            sg = self.env['htc.site.group'].search([
+                ('id', '=', values.get('site_group_id'))
+            ])
+            site_group_code = sg.site_group_code
+            list.append(site_group_code)
+            year = datetime.datetime.today().strftime("%y")
+            list.append(year)
+            count = len(self.env['htc.file_name_field_template'].search([
+                ('site_group_id', '=', sg.id)
+            ]))
+
+            serial = '{0:03}'.format(count + 1)
+
+            list.append(serial)
+            template_code = '-'.join(str(x) for x in list)
+        modified_field = {'template_code': template_code}
+        values.update(modified_field)
+        record = super(FileNameFieldTemplate, self).create(values)
+        return record

@@ -11,33 +11,12 @@ class FileFieldDefinition(models.Model):
                       ('mac_address', 'Mac Address'),
                       ('%y%m%d', 'Count Data Date'),
                       ('%H%M%S', 'Last Count Time')]
-    # format_type = fields.Selection(
-    #     [
-    #         ('Member', 'Member'),
-    #         ('Date', 'Date'),
-    #         ('Time', 'Time'),
-    #     ],
-    #     required=True,
-    #     store=True,
-    #     default=None,
-    # )
+
     code_description = fields.Char(
         "Code Description", required=True, help="Key in Code Description")
     code = fields.Char("Code", required=True, help="Key in Code")
     map_to = fields.Selection(
         selection_list, required=True, help="Select Map To")
-    # site_group_id = fields.Many2one(
-    #     "htc.site.group", "Site Group", required=True)
-
-    # status = fields.Boolean("Active", default=True)
-
-    # brand_name = fields.Char(
-    #     "Brand Name", required=True, help="Key in Brand Name")
-
-    # def toggle_status(self):
-    #     record = super(SiteGroupFileFieldDefinition,
-    #                    self).write({'status': not self.status})
-    #     return record
 
     @api.multi
     def name_get(self):

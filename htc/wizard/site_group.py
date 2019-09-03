@@ -95,15 +95,18 @@ class HtcSiteGroup(models.TransientModel):
                     #             sensor_site.write(val)
                     # else:
                     val = {
-                        'sensor_id': sen.id,
-                        'site_id': site_id,
-                        'start_date': date.today(),
-                        'status': True,
+                        'sensor_id':
+                            sen.id,
+                        'site_id':
+                            site_id,
+                        'start_date':
+                            date.today(),
+                        'file_name_field_template_id':
+                            vals['file_name_field_template_id'],
+                        'status':
+                            True,
                     }
                     sensor_site_obj.create(val)
-                    sen.file_name_field_template_id = vals[
-                        'file_name_field_template_id']
-                    sensor_obj.write(sen)
 
         else:
             raise UserError(_("Please select sensor for site setting."))

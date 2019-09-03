@@ -12,7 +12,7 @@ class SiteGroup(models.Model):
     site_group_name = fields.Char(
         "Site Group Name", required=True, help="Please key in site group name")
     site_group_code = fields.Char(
-        "Site Group Code", required=True, help="Please key in site group code")
+        "Site Group Code", required=True, help="Please key in site group code", size=4)
     license_code = fields.Char(
         "License Code", required=True, help="Please key in license no.")
     sensor_ids = fields.One2many("htc.sensor", "site_group_id", "Sensors")

@@ -12,6 +12,7 @@
                 </search>
             </field>
         </record>
+        
         <record model="ir.ui.view" id="htc_sensor_form">
             <field name="name">Sensor Form View</field>
             <field name="model">htc.sensor</field>
@@ -19,11 +20,17 @@
                 <form string="Sensor" create="false" delete="false" edit="false">
                     <sheet>
                         <div class="oe_button_box" name="button_box">
-                        <button name="%(htc.action_site_group_search_form)d" type="action" icon="fa-sitemap" class="oe_stat_button" 
-                            context="{'search_default_id': site_group_id}">
-                              <div class="o_field_widget o_stat_info">
-                                      <span class="o_stat_text">Site Group</span>
-                              </div>
+                            <button name="%(htc.action_site_group_search_form)d" type="action" icon="fa-sitemap" class="oe_stat_button" 
+                                context="{'search_default_id': site_group_id}">
+                                <div class="o_field_widget o_stat_info">
+                                        <span class="o_stat_text">Site Group</span>
+                                </div>
+                            </button>
+                            <button name="%(htc.action_sensors_search_form)d" type="action" icon="fa-sitemap" class="oe_stat_button" 
+                                context="{'search_default_sensor_id': id}">
+                                <div class="o_field_widget o_stat_info">
+                                        <span class="o_stat_text">Sensor and Sites</span>
+                                </div>
                             </button>
                             <button name="toggle_status" type="object"
                                     class="oe_stat_button" icon="fa-check">

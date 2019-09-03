@@ -1,0 +1,36 @@
+<odoo>
+  <data>
+    <record model="ir.ui.view" id="issue_config_sensors_form">
+      <field name="name">Sensors and Site Configruation</field>
+      <field name="model">htc.issue_config_sensor_wizard</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <group>
+                <field name="site_id"  readonly="1"/>
+                <field name="issue_template_code"  readonly="1" />
+              </group>
+              <group>
+              </group>
+            </group>
+            <field name="sensor_ids" domain="[('sensor_site_ids.site_id', '=', site_id)]">
+              <tree edit="false">
+                <field name="mac_address"/>
+                <field name="brand_name"/>
+              </tree>
+            </field>
+          </sheet>
+        </form>
+      </field>
+    </record>
+   <record id="action_issue_config_sensors_site_wizard_form" model="ir.actions.act_window">
+     <field name="name">Issue Sensors Site Config</field>
+     <field name="res_model">htc.issue_config_sensor_wizard</field>
+     <field name="view_type">form</field>
+     <field name="view_mode">tree,form</field>
+     <field name="view_id" ref="issue_config_sensors_form"/> 
+     <field name="target">new</field>
+    </record>
+  </data>
+</odoo>

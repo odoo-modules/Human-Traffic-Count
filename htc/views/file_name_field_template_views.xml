@@ -42,7 +42,7 @@
                             <field name="template_code" readonly="1" placeholder="Template Code"/>
                             <field name="file_name_separator" placeholder="File Name Separator" attrs="{'required' : True}" />
                             <field name="file_fields_definition_ids" widget="many2many_tags" options="{'no_create_edit':'1'}"/>
-                            <field name="remark"  placeholder="Remark"  readonly="1" />
+                            <field name="remark"  placeholder="Remark" />
                             <field name="symbol_file_format"  placeholder=""  readonly="1" />
                         </group>    
                     </sheet>

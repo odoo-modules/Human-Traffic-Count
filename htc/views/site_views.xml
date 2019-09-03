@@ -12,6 +12,7 @@
                 </search>
             </field>
         </record>
+        
         <record model="ir.ui.view" id="htc_site_tree">
             <field name="name">Site Tree View</field>
             <field name="model">htc.site</field>
@@ -46,10 +47,21 @@
             <field name="model">htc.site</field>
             <field name="arch" type="xml">
                 <form string="site">
+                    <header>
+                      <button string="Generate Sensors Configuration" name="%(htc.action_issue_config_sensors_site_wizard_form)d" type="action"  context="{'site_id': id}"/>
+                    </header>
                     <sheet>
+                    <div class="oe_button_box" name="button_box">
+                            <button name="%(htc.action_sites_search_form)d" type="action" icon="fa-sitemap" class="oe_stat_button" 
+                                context="{'search_default_site_id': id}">
+                                <div class="o_field_widget o_stat_info">
+                                        <span class="o_stat_text">Site Sensors</span>
+                                </div>
+                            </button>
+                        </div>
                         <group>
                             <group>
-                                <field name="site_group_id"  widget="selection" attrs="{'required' : True}" placeholder="Site Group Name"/>
+                                <field name="site_group_id" attrs="{'required' : True}" placeholder="Site Group Name"/>
                                 <field name="site_name"  placeholder="Site Name"/>
                                 <field name="site_code" attrs="{'readonly': [('id', '>', 0)],'requierd': True}" placeholder="Site Code"/>
                                 <field name="file_name_field_template_ids" widget="many2many_tags" requierd="1" domain="[('status', '=', True), ('site_group_id', '=', site_group_id)]" options="{'no_create_edit':'1'}"/>
@@ -72,9 +84,9 @@
                                         <field name="ftp_server_url" attrs="{'readonly': [('ftp_enable', '!=', True)], 'required' :[('ftp_enable', '=', True)]}"/>
                                         <field name="ftp_server_port" attrs="{'readonly': [('ftp_enable', '!=', True)], 'required' :[('ftp_enable', '=', True)]}"/>
                                         <field name="ftp_destination" attrs="{'readonly': [('ftp_enable', '!=', True)], 'required' :[('ftp_enable', '=', True)]}"/>
-                                        <field name="ftp_enable_authentication" attrs="{'readonly': [('ftp_enable', '!=', True)], 'required' :[('ftp_enable', '=', True)]}"/>
-                                        <field name="ftp_user_name" attrs="{'readonly': [('ftp_enable_authentication', '!=', True)], 'required' :[('ftp_enable_authentication', '=', True)]}"/>
-                                        <field name="ftp_password" attrs="{'readonly': [('ftp_enable_authentication', '!=', True)], 'required' :[('ftp_enable_authentication', '=', True)]}"/>
+                                        <!-- <field name="ftp_enable_authentication" attrs="{'readonly': [('ftp_enable', '!=', True)], 'required' :[('ftp_enable', '=', True)]}"/> -->
+                                        <field name="ftp_user_name" attrs="{'readonly': [('ftp_enable', '!=', True)], 'required' :[('ftp_enable', '=', True)]}"/>
+                                        <field name="ftp_password" attrs="{'readonly': [('ftp_enable', '!=', True)], 'required' :[('ftp_enable', '=', True)]}"/>
                                         <field name="ftp_ftps" attrs="{'readonly': [('ftp_enable', '!=', True)], 'required' :[('ftp_enable', '=', True)]}"/>
                                         <field name="ftp_sni_host_name" attrs="{'readonly': [('ftp_ftps', '!=', True)], 'required' :[('ftp_ftps', '=', True)]}"/>
                                         <field name="ftp_enable_external_ip" attrs="{'readonly': [('ftp_enable', '!=', True)], 'required' :[('ftp_enable', '=', True)]}"/>
@@ -162,6 +174,5 @@
                 </form>
             </field>
         </record>
-        
     </data>
 </odoo>

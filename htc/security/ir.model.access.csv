@@ -11,3 +11,4 @@ access_htc_site_group_wizard,htc.site.group.wizard,model_htc_site_group_wizard,,
 access_import_site_group,import.site_group,model_import_site_group,,1,1,1,1
 access_htc_file_field_definition,htc.file_field_definition,model_htc_file_field_definition,,1,1,1,1
 access_htc_file_name_field_template,htc.file_name_field_template,model_htc_file_name_field_template,,1,1,1,1
+access_htc_issue_config_sensor_wizard,htc.issue_config_sensor_wizard,model_htc_issue_config_sensor_wizard,,1,1,1,1

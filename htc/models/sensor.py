@@ -42,8 +42,6 @@ class Sensor(models.Model):
     invoice_date = fields.Char('Invoice Date')
     brand_name = fields.Char('Brand Name')
     license_code = fields.Char('License Code')
-    file_name_field_template_id = fields.Integer(
-        'File Name Template', default=None)
     template_file_name = fields.Char(
         'Template Name', store=False, compute='_get_template_name')
 
@@ -166,11 +164,14 @@ class Sensor(models.Model):
     def _get_template_name(self):
         result = []
         for record in self:
-            if record.file_name_field_template_id:
-                template = self.env['htc.file_name_field_template'].search([
-                    ('id', '=', record.file_name_field_template_id)
-                ])[0]
-                record.template_file_name = template.template_name
+            if record.sensor_site_ids:
+                if len(record.sensor_site_ids) > 1:
+                    for v in record.sensor_site_ids:
+                        if v.status is True:
+                            record.template_file_name = v.file_name_field_template_id.template_name
+                else:
+                    for v in record.sensor_site_ids:
+                        record.template_file_name = v.file_name_field_template_id.template_name
 
     @api.one
     @api.depends('sensor_site_ids')

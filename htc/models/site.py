@@ -11,7 +11,7 @@ class Site(models.Model):
     site_group_id = fields.Many2one(
         "htc.site.group", string="Site Group Name", requierd=True)
     site_name = fields.Char("Site Name", required=True)
-    site_code = fields.Char("Site Code", required=True)
+    site_code = fields.Char("Site Code", required=True, size=4)
     group_ids = fields.One2many("htc.group", "site_id", string="Groups")
     daily_counter_ids = fields.One2many(
         "htc.daily_counter", "site_id", string="Daily Counts")
@@ -24,21 +24,13 @@ class Site(models.Model):
     ip_range = fields.Char("IP Range", requierd=True)
     interface_code = fields.Char("Interface Code")
     debug_mode_enable = fields.Boolean("Debug Mode Enable", default=False)
-
-    # file_name_separator = fields.Selection([('.', 'dot (.)'),
-    #                                         ('_', 'underscore (_)')],
-    #                                        default='.')
-
-    # site_file_name_format = fields.Char(
-    #     compute="get_file_name", store=False, string="Example File Name")
     file_name_field_template_ids = fields.Many2many(
         "htc.file_name_field_template",
         string="Site File Name Fields",
         required=True)
-    # file_format_count = fields.Integer(
-    #     '# Format Count',
-    #     compute='_compute_format_count',
-    #     help="The file format of site")
+
+    sensor_site_ids = fields.One2many("htc.sensor.sites", "site_id",
+                                      "Sensor_Site")
 
     ### FTP ###
     ftp_enable = fields.Boolean("Enable FTP")
@@ -63,7 +55,7 @@ class Site(models.Model):
     ftp_current_delivery_schdule = fields.Char("Current Delivery Schedule")
     ftp_max_attempts = fields.Integer("Max Attempts")
     ftp_retry_level = fields.Integer("Retry Level")
-    ftp_enable_authentication = fields.Boolean("Enable Authentication")
+    # ftp_enable_authentication = fields.Boolean("Enable Authentication")
     ftp_user_name = fields.Char("User Name")
     ftp_password = fields.Char("Password")
     ftp_ftps = fields.Boolean("FTPS")

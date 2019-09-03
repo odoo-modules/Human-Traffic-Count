@@ -43,6 +43,7 @@ class ImportSiteGroup(models.Model):
                                                 val['site_group_code'])])
         if not site_group_id:
             site_group_id = site_group_obj.create(val).id
+        sensor_count = len(self.env['htc.sensor'].search([('site_group_id'), '=', site_group_id.id]))
         import_file = self.import_file
         file_name = self.import_fname
         r = []
@@ -108,6 +109,7 @@ class ImportSiteGroup(models.Model):
                         already_sensor_count += 1
                         continue
                     else:
+                        sensor_count += 1
                         sen_val = {
                             'mac_address': data[0],
                             'brand_name': data[1],
@@ -121,6 +123,7 @@ class ImportSiteGroup(models.Model):
                             'company_code': file_data[0][1],
                             'invoice_no': file_data[1][1],
                             'invoice_date': file_data[2][1],
+                            'sensor_id': site_group_id.site_group_code + str(sensor_count)
                         }
                     sensor_obj.create(sen_val)
                     if self.enable_debug_log:
